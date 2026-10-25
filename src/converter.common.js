@@ -165,6 +165,7 @@ export class Converter {
 	 * @returns {number}
 	 */
 	static toRetryTime(buffer) {
+		// todo units 100us
 		return ConverterUtil.toU16BE(buffer)
 	}
 
@@ -173,6 +174,7 @@ export class Converter {
 	 * @returns {SPIBufferSource}
 	 */
 	static fromRetryTime(retryTime) {
+		// todo units 100us
 		return ConverterUtil.fromU16BE(retryTime)
 	}
 
@@ -196,7 +198,8 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toPPPLCPRequestTime(buffer) {
+	static toPPPLCPRequestTimer(buffer) {
+		// todo units 25ms
 		return ConverterUtil.toU8(buffer)
 	}
 
@@ -204,7 +207,8 @@ export class Converter {
 	 * @param {number} time
 	 * @returns {SPIBufferSource}
 	 */
-	static fromPPPLCPRequestTime(time) {
+	static fromPPPLCPRequestTimer(time) {
+		// todo units 25ms
 		return ConverterUtil.fromU8(time)
 	}
 

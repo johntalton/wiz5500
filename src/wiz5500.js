@@ -353,17 +353,17 @@ export class Wiz5500 {
 	/**
 	 * @returns {Promise<number>}
 	 */
-	async readPPPLCPRequestTime() {
+	async readPPPLCPRequestTimer() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.PPP_LCP_REQUEST_TIMER, 1)
-		return Converter.toPPPLCPRequestTime(buffer)
+		return Converter.toPPPLCPRequestTimer(buffer)
 	}
 
 	/**
 	 * @param {number} time
 	 * @returns {Promise<void>}
 	 */
-	async writePPPLCPRequestTime(time) {
-		const buffer = Converter.fromPPPLCPRequestTime(time)
+	async writePPPLCPRequestTimer(time) {
+		const buffer = Converter.fromPPPLCPRequestTimer(time)
 		return this.#writeCommon(COMMON_REGISTERS.PPP_LCP_REQUEST_TIMER, buffer)
 	}
 
