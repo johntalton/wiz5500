@@ -25,5 +25,6 @@
     "c8": "^12.0.0"
   },
   "dependencies": {
+    "@johntalton/bitsmush": "^1.0.4"
   }
 }

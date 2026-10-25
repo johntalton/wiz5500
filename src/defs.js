@@ -1,5 +1,7 @@
 
 
+export const CHIP_VERSION_W5500 = 0x04
+
 export const BLOCKS = {
 	COMMON: 0x00,
 
@@ -51,7 +53,7 @@ export const COMMON_REGISTERS = {
 	SOCKET_INTERRUPT: 0x00_17,
 	SOCKET_INTERRUPT_MASK: 0x00_18,
 
-	RETRY_TIMER: 0x00_19,
+	RETRY_TIME: 0x00_19,
 	RETRY_COUNT: 0x00_1B,
 
 	PPP_LCP_REQUEST_TIMER: 0x00_1C,
@@ -100,6 +102,10 @@ export const SOCKET_REGISTER = {
 	SOCKET_KEEP_ALIVE_TIMER: 0x00_2F
 }
 
+//
+export const SOCKET_BLOCK_SIZE = 4
+
+//
 export const ADDRESS_SIZE = 4
 export const HARDWARE_ADDRESS_SIZE = 6
 export const PORT_SIZE = 2
