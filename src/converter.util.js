@@ -46,7 +46,7 @@ export class ConverterUtil {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toU16BE(buffer) {
+	static decodeU16BE(buffer) {
 		const dv = ArrayBuffer.isView(buffer) ?
 			new DataView(buffer.buffer, buffer.byteOffset) :
 			new DataView(buffer)
@@ -58,7 +58,7 @@ export class ConverterUtil {
 	 * @param {number} value
 	 * @returns {SPIBufferSource}
 	 */
-	static fromU16BE(value) {
+	static encodeU16BE(value) {
 		const dv = new DataView(new ArrayBuffer(2))
 		dv.setUint16(0, value, false)
 		return dv
@@ -68,7 +68,7 @@ export class ConverterUtil {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toU8(buffer) {
+	static decodeU8(buffer) {
 		const u8 = ArrayBuffer.isView(buffer) ?
 			new Uint8Array(buffer.buffer, buffer.byteOffset) :
 			new Uint8Array(buffer)
@@ -84,7 +84,7 @@ export class ConverterUtil {
 	 * @param {number} value
 	 * @returns {SPIBufferSource}
 	 */
-	static fromU8(value) {
+	static encodeU8(value) {
 		return Uint8ClampedArray.from([ value ])
 	}
 
@@ -96,7 +96,7 @@ export class ConverterUtil {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {Address}
 	 */
-	static toAddress(buffer) {
+	static decodeAddress(buffer) {
 		const u8 = ArrayBuffer.isView(buffer) ?
 			new Uint8Array(buffer.buffer, buffer.byteOffset) :
 			new Uint8Array(buffer)
@@ -118,7 +118,7 @@ export class ConverterUtil {
 	 * @param {AddressInput} address
 	 * @returns {SPIBufferSource}
 	 */
-	static fromAddress(address) {
+	static encodeAddress(address) {
 		const parts = (typeof address === 'string') ? parseDotQuad(address) :
 			Array.isArray(address) ? address :
 			('a' in address) ? [ address.a, address.b, address.c, address.d] :
@@ -139,7 +139,7 @@ export class ConverterUtil {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {HardwareAddress}
 	*/
-	static toHardwareAddress(buffer) {
+	static decodeHardwareAddress(buffer) {
 		const u8 = ArrayBuffer.isView(buffer) ?
 			new Uint8Array(buffer.buffer, buffer.byteOffset) :
 			new Uint8Array(buffer)
@@ -162,7 +162,7 @@ export class ConverterUtil {
 	 * @param {HardwareAddressInput} hardwareAddress
 	 * @returns {SPIBufferSource}
 	 */
-	static fromHardwareAddress(hardwareAddress) {
+	static encodeHardwareAddress(hardwareAddress) {
 		const parts = (typeof hardwareAddress === 'string') ? parseHardwareAddress(hardwareAddress) :
 			(Array.isArray(hardwareAddress)) ? hardwareAddress :
 			('a' in hardwareAddress) ? [
@@ -189,7 +189,7 @@ export class ConverterUtil {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toPort(buffer) {
+	static decodePort(buffer) {
 		return ConverterUtil.toU16BE(buffer)
 	}
 
@@ -197,7 +197,7 @@ export class ConverterUtil {
 	 * @param {number} port
 	 * @returns {SPIBufferSource}
 	 */
-	static fromPort(port) {
+	static encodePort(port) {
 		return ConverterUtil.fromU16BE(port)
 	}
 }

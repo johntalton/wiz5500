@@ -110,3 +110,4 @@ export const ADDRESS_SIZE = 4
 export const HARDWARE_ADDRESS_SIZE = 6
 export const PORT_SIZE = 2
 
+export const BUFFER_SIZES = [ 0, 1, 2, 4, 8, 16 ]

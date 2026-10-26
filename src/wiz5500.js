@@ -151,7 +151,7 @@ export class Wiz5500 {
 	 */
 	async readMode() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.MODE, 1)
-		return Converter.toMode(buffer)
+		return Converter.decodeMode(buffer)
 	}
 
 	/**
@@ -159,7 +159,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeMode(mode) {
-		const buffer = Converter.fromMode(mode)
+		const buffer = Converter.encodeMode(mode)
 		return this.#writeCommon(COMMON_REGISTERS.MODE, buffer)
 	}
 
@@ -168,7 +168,7 @@ export class Wiz5500 {
 	 */
 	async readGatewayAddress() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.GATEWAY_ADDRESS, ADDRESS_SIZE)
-		return ConverterUtil.toAddress(buffer)
+		return ConverterUtil.decodeAddress(buffer)
 	}
 
 	/**
@@ -176,7 +176,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeGatewayAddress(address) {
-		const buffer = ConverterUtil.fromAddress(address)
+		const buffer = ConverterUtil.encodeAddress(address)
 		return this.#writeCommon(COMMON_REGISTERS.GATEWAY_ADDRESS, buffer)
 	}
 
@@ -185,7 +185,7 @@ export class Wiz5500 {
 	 */
 	async readSubnetMaskAddress() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.SUBNET_MASK_ADDRESS, ADDRESS_SIZE)
-		return ConverterUtil.toAddress(buffer)
+		return ConverterUtil.decodeAddress(buffer)
 	}
 
 	/**
@@ -193,7 +193,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSubnetMaskAddress(address) {
-		const buffer = ConverterUtil.fromAddress(address)
+		const buffer = ConverterUtil.encodeAddress(address)
 		return this.#writeCommon(COMMON_REGISTERS.SUBNET_MASK_ADDRESS, buffer)
 	}
 
@@ -202,7 +202,7 @@ export class Wiz5500 {
 	 */
 	async readSourceHardwareAddress() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.SOURCE_HARDWARE_ADDRESS, HARDWARE_ADDRESS_SIZE)
-		return ConverterUtil.toHardwareAddress(buffer)
+		return ConverterUtil.decodeHardwareAddress(buffer)
 	}
 
 	/**
@@ -210,7 +210,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSourceHardwareAddress(hardwareAddress) {
-		const buffer = ConverterUtil.fromHardwareAddress(hardwareAddress)
+		const buffer = ConverterUtil.encodeHardwareAddress(hardwareAddress)
 		return this.#writeCommon(COMMON_REGISTERS.SOURCE_HARDWARE_ADDRESS, buffer)
 	}
 
@@ -219,7 +219,7 @@ export class Wiz5500 {
 	 */
 	async readSourceIPAddress() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.SOURCE_IP_ADDRESS, ADDRESS_SIZE)
-		return ConverterUtil.toAddress(buffer)
+		return ConverterUtil.decodeAddress(buffer)
 	}
 
 	/**
@@ -227,7 +227,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSourceIPAddress(address) {
-		const buffer = ConverterUtil.fromAddress(address)
+		const buffer = ConverterUtil.encodeAddress(address)
 		return this.#writeCommon(COMMON_REGISTERS.SOURCE_IP_ADDRESS, buffer)
 	}
 
@@ -236,7 +236,7 @@ export class Wiz5500 {
 	 */
 	async readInterruptLowLevelTimer() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.INTERRUPT_LOW_LEVEL_TIMER, 2)
-		return Converter.toInterruptLowLevelTimer(buffer)
+		return Converter.decodeInterruptLowLevelTimer(buffer)
 	}
 
 	/**
@@ -244,7 +244,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeInterruptLowLevelTimer(level) {
-		const buffer = Converter.fromInterruptLowLevelTimer(level)
+		const buffer = Converter.encodeInterruptLowLevelTimer(level)
 		return this.#writeCommon(COMMON_REGISTERS.INTERRUPT_LOW_LEVEL_TIMER, buffer)
 	}
 
@@ -253,7 +253,7 @@ export class Wiz5500 {
 	 */
 	async readInterrupt() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.INTERRUPT, 1)
-		return Converter.toInterrupt(buffer)
+		return Converter.decodeInterrupt(buffer)
 	}
 
 	/**
@@ -261,7 +261,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeInterrupt(interrupt) {
-		const buffer = Converter.fromInterrupt(interrupt)
+		const buffer = Converter.encodeInterrupt(interrupt)
 		return this.#writeCommon(COMMON_REGISTERS.INTERRUPT, buffer)
 	}
 
@@ -270,7 +270,7 @@ export class Wiz5500 {
 	 */
 	async readInterruptMask() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.INTERRUPT_MASK, 1)
-		return Converter.toInterruptMask(buffer)
+		return Converter.decodeInterruptMask(buffer)
 	}
 
 	/**
@@ -278,7 +278,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeInterruptMask(mode) {
-		const buffer = Converter.fromInterruptMask(mode)
+		const buffer = Converter.encodeInterruptMask(mode)
 		return this.#writeCommon(COMMON_REGISTERS.INTERRUPT_MASK, buffer)
 	}
 
@@ -287,7 +287,7 @@ export class Wiz5500 {
 	 */
 	async readSocketInterrupt() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.SOCKET_INTERRUPT, 1)
-		return Converter.toSocketInterrupt(buffer)
+		return Converter.decodeSocketInterrupt(buffer)
 	}
 
 	/**
@@ -295,7 +295,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketInterrupt(socketInterrupt) {
-		const buffer = Converter.fromSocketInterrupt(socketInterrupt)
+		const buffer = Converter.encodeSocketInterrupt(socketInterrupt)
 		return this.#writeCommon(COMMON_REGISTERS.SOCKET_INTERRUPT, buffer)
 	}
 
@@ -304,7 +304,7 @@ export class Wiz5500 {
 	 */
 	async readSocketInterruptMask() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.SOCKET_INTERRUPT_MASK, 1)
-		return Converter.toSocketInterruptMask(buffer)
+		return Converter.decodeSocketInterruptMask(buffer)
 	}
 
 	/**
@@ -312,7 +312,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketInterruptMask(socketInterruptMask) {
-		const buffer = Converter.fromSocketInterruptMask(socketInterruptMask)
+		const buffer = Converter.encodeSocketInterruptMask(socketInterruptMask)
 		return this.#writeCommon(COMMON_REGISTERS.SOCKET_INTERRUPT_MASK, buffer)
 	}
 
@@ -321,7 +321,7 @@ export class Wiz5500 {
 	 */
 	async readRetryTime() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.RETRY_TIME, 2)
-		return Converter.toRetryTime(buffer)
+		return Converter.decodeRetryTime(buffer)
 	}
 
 	/**
@@ -329,7 +329,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeRetryTime(retryTime) {
-		const buffer = Converter.fromRetryTime(retryTime)
+		const buffer = Converter.encodeRetryTime(retryTime)
 		return this.#writeCommon(COMMON_REGISTERS.RETRY_TIME, buffer)
 	}
 
@@ -338,7 +338,7 @@ export class Wiz5500 {
 	 */
 	async readRetryCount() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.RETRY_COUNT, 1)
-		return Converter.toRetryCount(buffer)
+		return Converter.decodeRetryCount(buffer)
 	}
 
 	/**
@@ -346,7 +346,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeRetryCount(count) {
-		const buffer = Converter.fromRetryCount(count)
+		const buffer = Converter.encodeRetryCount(count)
 		return this.#writeCommon(COMMON_REGISTERS.RETRY_COUNT, buffer)
 	}
 
@@ -355,7 +355,7 @@ export class Wiz5500 {
 	 */
 	async readPPPLCPRequestTimer() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.PPP_LCP_REQUEST_TIMER, 1)
-		return Converter.toPPPLCPRequestTimer(buffer)
+		return Converter.decodePPPLCPRequestTimer(buffer)
 	}
 
 	/**
@@ -363,7 +363,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writePPPLCPRequestTimer(time) {
-		const buffer = Converter.fromPPPLCPRequestTimer(time)
+		const buffer = Converter.encodePPPLCPRequestTimer(time)
 		return this.#writeCommon(COMMON_REGISTERS.PPP_LCP_REQUEST_TIMER, buffer)
 	}
 
@@ -372,7 +372,7 @@ export class Wiz5500 {
 	 */
 	async readPPPLCPMagicNumber() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.PPP_LCP_MAGIC_NUMBER, 1)
-		return Converter.toPPPLCPMagicNumber(buffer)
+		return Converter.decodePPPLCPMagicNumber(buffer)
 	}
 
 	/**
@@ -380,7 +380,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writePPPLCPMagicNumber(magic) {
-		const buffer = Converter.fromPPPLCPMagicNumber(magic)
+		const buffer = Converter.encodePPPLCPMagicNumber(magic)
 		return this.#writeCommon(COMMON_REGISTERS.PPP_LCP_MAGIC_NUMBER, buffer)
 	}
 
@@ -389,7 +389,7 @@ export class Wiz5500 {
 	 */
 	async readPPPDestinationMACAddress() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.PPP_DESTINATION_MAC_ADDRESS, HARDWARE_ADDRESS_SIZE)
-		return ConverterUtil.toHardwareAddress(buffer)
+		return ConverterUtil.decodeHardwareAddress(buffer)
 	}
 
 	/**
@@ -397,7 +397,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writePPPDestinationMACAddress(hardwareAddress) {
-		const buffer = ConverterUtil.fromHardwareAddress(hardwareAddress)
+		const buffer = ConverterUtil.encodeHardwareAddress(hardwareAddress)
 		return this.#writeCommon(COMMON_REGISTERS.PPP_DESTINATION_MAC_ADDRESS, buffer)
 	}
 
@@ -406,7 +406,7 @@ export class Wiz5500 {
 	 */
 	async readPPPSessionIdentification() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.PPP_SESSION_IDENTIFICATION, 2)
-		return Converter.toPPPSessionIdentification(buffer)
+		return Converter.decodePPPSessionIdentification(buffer)
 	}
 
 	/**
@@ -414,7 +414,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writePPPSessionIdentification(id) {
-		const buffer = Converter.fromPPPSessionIdentification(id)
+		const buffer = Converter.encodePPPSessionIdentification(id)
 		return this.#writeCommon(COMMON_REGISTERS.PPP_SESSION_IDENTIFICATION, buffer)
 	}
 
@@ -423,7 +423,7 @@ export class Wiz5500 {
 	 */
 	async readPPPMaximumSegmentSize() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.PPP_MAXIMUM_SEGMENT_SIZE, 2)
-		return Converter.toPPPMaximumSegmentSize(buffer)
+		return Converter.decodePPPMaximumSegmentSize(buffer)
 	}
 
 	/**
@@ -431,7 +431,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writePPPMaximumSegmentSize(size) {
-		const buffer = Converter.fromPPPMaximumSegmentSize(size)
+		const buffer = Converter.encodePPPMaximumSegmentSize(size)
 		return this.#writeCommon(COMMON_REGISTERS.PPP_MAXIMUM_SEGMENT_SIZE, buffer)
 	}
 
@@ -440,7 +440,7 @@ export class Wiz5500 {
 	 */
 	async readUnreachableAddress() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.UNREACHABLE_ADDRESS, ADDRESS_SIZE)
-		return ConverterUtil.toAddress(buffer)
+		return ConverterUtil.decodeAddress(buffer)
 	}
 
 	/**
@@ -448,7 +448,7 @@ export class Wiz5500 {
 	 */
 	async readUnreachablePort() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.UNREACHABLE_PORT, PORT_SIZE)
-		return ConverterUtil.toPort(buffer)
+		return ConverterUtil.decodePort(buffer)
 	}
 
 	/**
@@ -456,7 +456,7 @@ export class Wiz5500 {
 	 */
 	async readPHYConfig() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.PHY_CONFIG, 1)
-		return Converter.toPHYConfig(buffer)
+		return Converter.decodePHYConfig(buffer)
 	}
 
 	/**
@@ -464,7 +464,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writePHYConfig(config) {
-		const buffer = Converter.fromPHYConfig(config)
+		const buffer = Converter.encodePHYConfig(config)
 		return this.#writeCommon(COMMON_REGISTERS.PHY_CONFIG, buffer)
 	}
 
@@ -473,7 +473,7 @@ export class Wiz5500 {
 	 */
 	async readChipVersion() {
 		const buffer = await this.#readCommon(COMMON_REGISTERS.CHIP_VERSION, 1)
-		return Converter.toChipVersion(buffer)
+		return Converter.decodeChipVersion(buffer)
 	}
 
 
@@ -487,7 +487,7 @@ export class Wiz5500 {
 	 */
 	async readSocketMode(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_MODE, 1)
-		return ConverterSocket.toMode(buffer)
+		return ConverterSocket.decodeMode(buffer)
 	}
 
 	/**
@@ -496,7 +496,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketMode(socketNumber, mode) {
-		const buffer = ConverterSocket.fromMode(mode)
+		const buffer = ConverterSocket.encodeMode(mode)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_MODE, buffer)
 	}
 
@@ -506,7 +506,7 @@ export class Wiz5500 {
 	 */
 	async readSocketCommand(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_COMMAND, 1)
-		return ConverterSocket.toCommand(buffer)
+		return ConverterSocket.decodeCommand(buffer)
 	}
 
 	/**
@@ -515,7 +515,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketCommand(socketNumber, command) {
-		const buffer = ConverterSocket.fromCommand(command)
+		const buffer = ConverterSocket.encodeCommand(command)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_COMMAND, buffer)
 	}
 
@@ -525,7 +525,7 @@ export class Wiz5500 {
 	 */
 	async readSocketSocketInterrupt(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_INTERRUPT, 1)
-		return ConverterSocket.toSocketInterrupt(buffer)
+		return ConverterSocket.decodeSocketInterrupt(buffer)
 	}
 
 	/**
@@ -534,7 +534,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketSocketInterrupt(socketNumber, interrupt) {
-		const buffer = ConverterSocket.fromSocketInterrupt(interrupt)
+		const buffer = ConverterSocket.encodeSocketInterrupt(interrupt)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_INTERRUPT, buffer)
 	}
 
@@ -544,7 +544,7 @@ export class Wiz5500 {
 	 */
 	async readSocketStatus(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_STATUS, 1)
-		return ConverterSocket.toStatus(buffer)
+		return ConverterSocket.decodeStatus(buffer)
 	}
 
 	/**
@@ -553,7 +553,7 @@ export class Wiz5500 {
 	 */
 	async readSocketSourcePort(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_SOURCE_PORT, PORT_SIZE)
-		return ConverterUtil.toPort(buffer)
+		return ConverterUtil.decodePort(buffer)
 	}
 
 	/**
@@ -562,7 +562,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketSourcePort(socketNumber, port) {
-		const buffer = ConverterUtil.fromPort(port)
+		const buffer = ConverterUtil.encodePort(port)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_SOURCE_PORT, buffer)
 	}
 
@@ -572,7 +572,7 @@ export class Wiz5500 {
 	 */
 	async readSocketDestinationHardwareAddress(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_DESTINATION_HARDWARE_ADDRESS, HARDWARE_ADDRESS_SIZE)
-		return ConverterUtil.toHardwareAddress(buffer)
+		return ConverterUtil.decodeHardwareAddress(buffer)
 	}
 
 	/**
@@ -581,7 +581,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketDestinationHardwareAddress(socketNumber, hardwareAddress) {
-		const buffer = ConverterUtil.fromHardwareAddress(hardwareAddress)
+		const buffer = ConverterUtil.encodeHardwareAddress(hardwareAddress)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_DESTINATION_HARDWARE_ADDRESS, buffer)
 	}
 
@@ -591,7 +591,7 @@ export class Wiz5500 {
 	 */
 	async readSocketDestinationIPAddress(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_DESTINATION_IP_ADDRESS, ADDRESS_SIZE)
-		return ConverterUtil.toAddress(buffer)
+		return ConverterUtil.decodeAddress(buffer)
 	}
 
 	/**
@@ -600,7 +600,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketDestinationIPAddress(socketNumber, address) {
-		const buffer = ConverterUtil.fromAddress(address)
+		const buffer = ConverterUtil.encodeAddress(address)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_DESTINATION_IP_ADDRESS, buffer)
 	}
 
@@ -610,7 +610,7 @@ export class Wiz5500 {
 	 */
 	async readSocketDestinationPort(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_DESTINATION_PORT, PORT_SIZE)
-		return ConverterUtil.toPort(buffer)
+		return ConverterUtil.decodePort(buffer)
 	}
 
 	/**
@@ -619,7 +619,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketDestinationPort(socketNumber, port) {
-		const buffer = ConverterUtil.fromPort(port)
+		const buffer = ConverterUtil.encodePort(port)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_DESTINATION_PORT, buffer)
 	}
 
@@ -629,7 +629,7 @@ export class Wiz5500 {
 	 */
 	async readSocketMaximumSegmentSize(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_MAXIMUM_SEGMENT_SIZE, 2)
-		return ConverterSocket.toMaximumSegmentSize(buffer)
+		return ConverterSocket.decodeMaximumSegmentSize(buffer)
 	}
 
 	/**
@@ -638,7 +638,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketMaximumSegmentSize(socketNumber, size) {
-		const buffer = ConverterSocket.fromMaximumSegmentSize(size)
+		const buffer = ConverterSocket.encodeMaximumSegmentSize(size)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_MAXIMUM_SEGMENT_SIZE, buffer)
 	}
 
@@ -649,7 +649,7 @@ export class Wiz5500 {
 	 */
 	async readSocketIPTypeOfService(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_IP_TOS, 1)
-		return ConverterSocket.toIPTypeOfService(buffer)
+		return ConverterSocket.decodeIPTypeOfService(buffer)
 	}
 
 	/**
@@ -659,7 +659,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketIPTypeOfService(socketNumber, typeOfService) {
-		const buffer = ConverterSocket.fromIPTypeOfService(typeOfService)
+		const buffer = ConverterSocket.encodeIPTypeOfService(typeOfService)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_IP_TOS, buffer)
 	}
 
@@ -670,7 +670,7 @@ export class Wiz5500 {
 	 */
 	async readSocketIPTimeToLive(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_IP_TLL, 1)
-		return ConverterSocket.toIPTimeToLive(buffer)
+		return ConverterSocket.decodeIPTimeToLive(buffer)
 	}
 
 	/**
@@ -680,7 +680,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketIPTimeToLive(socketNumber, timeToLive) {
-		const buffer = ConverterSocket.fromIPTimeToLive(timeToLive)
+		const buffer = ConverterSocket.encodeIPTimeToLive(timeToLive)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_IP_TLL, buffer)
 	}
 
@@ -690,7 +690,7 @@ export class Wiz5500 {
 	 */
 	async readSocketReceiveBufferSize(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_RECEIVE_BUFFER_SIZE, 1)
-		return ConverterSocket.toReceiveBufferSize(buffer)
+		return ConverterSocket.decodeReceiveBufferSize(buffer)
 	}
 
 	/**
@@ -699,7 +699,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketReceiveBufferSize(socketNumber, size) {
-		const buffer = ConverterSocket.fromReceiveBufferSize(size)
+		const buffer = ConverterSocket.encodeReceiveBufferSize(size)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_RECEIVE_BUFFER_SIZE, buffer)
 	}
 
@@ -709,7 +709,7 @@ export class Wiz5500 {
 	 */
 	async readSocketTransmitBufferSize(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_TRANSMIT_BUFFER_SIZE, 1)
-		return ConverterSocket.toTransmitBufferSize(buffer)
+		return ConverterSocket.decodeTransmitBufferSize(buffer)
 	}
 
 	/**
@@ -718,7 +718,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketTransmitBufferSize(socketNumber, size) {
-		const buffer = ConverterSocket.fromTransmitBufferSize(size)
+		const buffer = ConverterSocket.encodeTransmitBufferSize(size)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_TRANSMIT_BUFFER_SIZE, buffer)
 	}
 
@@ -728,7 +728,7 @@ export class Wiz5500 {
 	 */
 	async readSocketTXFreeSize(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_TX_FREE_SIZE, 2)
-		return ConverterSocket.toTXFreeSize(buffer)
+		return ConverterSocket.decodeTXFreeSize(buffer)
 	}
 
 	/**
@@ -737,7 +737,7 @@ export class Wiz5500 {
 	 */
 	async readSocketTXReadPointer(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_TX_READ_POINTER, 2)
-		return ConverterSocket.toTXReadPointer(buffer)
+		return ConverterSocket.decodeTXReadPointer(buffer)
 	}
 
 	/**
@@ -746,7 +746,7 @@ export class Wiz5500 {
 	 */
 	async readSocketTXWritePointer(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_TX_WRITE_POINTER, 2)
-		return ConverterSocket.toTXWritePointer(buffer)
+		return ConverterSocket.decodeTXWritePointer(buffer)
 	}
 
 	/**
@@ -755,7 +755,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketTXWritePointer(socketNumber, pointer) {
-		const buffer = ConverterSocket.fromTXWritePointer(pointer)
+		const buffer = ConverterSocket.encodeTXWritePointer(pointer)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_TX_WRITE_POINTER, buffer)
 	}
 
@@ -765,7 +765,7 @@ export class Wiz5500 {
 	 */
 	async readSocketRXReceiveSize(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_RX_RECEIVED_SIZE, 2)
-		return ConverterSocket.toRXReceiveSize(buffer)
+		return ConverterSocket.decodeRXReceiveSize(buffer)
 	}
 
 	/**
@@ -774,7 +774,7 @@ export class Wiz5500 {
 	 */
 	async readSocketRXReadPointer(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_RX_READ_POINTER, 2)
-		return ConverterSocket.toRXReadPointer(buffer)
+		return ConverterSocket.decodeRXReadPointer(buffer)
 	}
 
 	/**
@@ -783,7 +783,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketRXReadPointer(socketNumber, pointer) {
-		const buffer = ConverterSocket.fromRXReadPointer(pointer)
+		const buffer = ConverterSocket.encodeRXReadPointer(pointer)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_RX_READ_POINTER, buffer)
 	}
 
@@ -793,7 +793,7 @@ export class Wiz5500 {
 	 */
 	async readSocketRXWritePointer(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_RX_WRITE_POINTER, 2)
-		return ConverterSocket.toRXWritePointer(buffer)
+		return ConverterSocket.decodeRXWritePointer(buffer)
 	}
 
 	/**
@@ -802,7 +802,7 @@ export class Wiz5500 {
 	 */
 	async readSocketSocketInterruptMask(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_INTERRUPT_MASK, 1)
-		return ConverterSocket.toInterruptMask(buffer)
+		return ConverterSocket.decodeInterruptMask(buffer)
 	}
 
 	/**
@@ -811,7 +811,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketSocketInterruptMask(socketNumber, value) {
-		const buffer = ConverterSocket.fromInterruptMask(value)
+		const buffer = ConverterSocket.encodeInterruptMask(value)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_INTERRUPT_MASK, buffer)
 	}
 
@@ -821,7 +821,7 @@ export class Wiz5500 {
 	 */
 	async readSocketFragmentOffsetInIPHeader(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_FRAGMENT_OFFSET_IN_IP_HEADER, 2)
-		return ConverterSocket.toFragmentOffsetInIPHeader(buffer)
+		return ConverterSocket.decodeFragmentOffsetInIPHeader(buffer)
 	}
 
 	/**
@@ -830,7 +830,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketFragmentOffsetInIPHeader(socketNumber, offset) {
-		const buffer = ConverterSocket.fromFragmentOffsetInIPHeader(offset)
+		const buffer = ConverterSocket.encodeFragmentOffsetInIPHeader(offset)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_FRAGMENT_OFFSET_IN_IP_HEADER, buffer)
 	}
 
@@ -840,7 +840,7 @@ export class Wiz5500 {
 	 */
 	async readSocketKeepAliveTimer(socketNumber) {
 		const buffer = await this.#readSocket(socketNumber, SOCKET_REGISTER.SOCKET_KEEP_ALIVE_TIMER, 1)
-		return ConverterSocket.toKeepAliveTimer(buffer)
+		return ConverterSocket.decodeKeepAliveTimer(buffer)
 	}
 
 	/**
@@ -849,7 +849,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketKeepAliveTimer(socketNumber, time) {
-		const buffer = ConverterSocket.fromKeepAliveTimer(time)
+		const buffer = ConverterSocket.encodeKeepAliveTimer(time)
 		return this.#writeSocket(socketNumber, SOCKET_REGISTER.SOCKET_KEEP_ALIVE_TIMER, buffer)
 	}
 

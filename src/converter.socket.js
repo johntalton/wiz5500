@@ -1,15 +1,24 @@
 import { BitSmush } from '@johntalton/bitsmush'
 import { ConverterUtil } from './converter.util.js'
+import { BUFFER_SIZES } from './defs.js'
 
 /** @import { SPIBufferSource } from './spi.js' */
 /** @import { SocketCommand, SocketStatus, BufferSize, SocketMode } from './types.js' */
+
+/**
+ * @param {number} size
+ * @returns {size is BufferSize}
+ */
+export function isBufferSize(size) {
+	return BUFFER_SIZES.includes(size)
+}
 
 export class ConverterSocket {
 	/**
 	 * @param {SPIBufferSource} buffer
 	 * @returns {SocketMode}
 	 */
-	static toMode(buffer) {
+	static decodeMode(buffer) {
 		const mode = ConverterUtil.toU8(buffer)
 
 
@@ -29,7 +38,7 @@ export class ConverterSocket {
 	 * @param {SocketMode} mode
 	 * @returns {SPIBufferSource}
 	 */
-	static fromMode(mode) {
+	static encodeMode(mode) {
 
 
 		return ConverterUtil.fromU8(value)
@@ -39,7 +48,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {SocketCommand}
 	 */
-	static toCommand(buffer) {
+	static decodeCommand(buffer) {
 		return ConverterUtil.toU8(buffer)
 	}
 
@@ -47,7 +56,7 @@ export class ConverterSocket {
 	 * @param {SocketCommand} command
 	 * @returns {SPIBufferSource}
 	 */
-	static fromCommand(command) {
+	static encodeCommand(command) {
 		return ConverterUtil.fromU8(command)
 	}
 
@@ -55,7 +64,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {}
 	 */
-	static toSocketInterrupt(buffer) {
+	static decodeSocketInterrupt(buffer) {
 		const interrupt = ConverterUtil.toU8(buffer)
 
 		return {
@@ -67,7 +76,7 @@ export class ConverterSocket {
 	 * @param {} interrupt
 	 * @returns {SPIBufferSource}
 	 */
-	static fromSocketInterrupt(interrupt) {
+	static encodeSocketInterrupt(interrupt) {
 
 
 		return ConverterUtil.fromU8(value)
@@ -77,7 +86,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {SocketStatus}
 	 */
-	static toStatus(buffer) {
+	static decodeStatus(buffer) {
 		return ConverterUtil.toU8(buffer)
 	}
 
@@ -85,7 +94,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toMaximumSegmentSize(buffer) {
+	static decodeMaximumSegmentSize(buffer) {
 		return ConverterUtil.toU16BE(buffer)
 	}
 
@@ -93,7 +102,7 @@ export class ConverterSocket {
 	 * @param {number} size
 	 * @returns {SPIBufferSource}
 	 */
-	static fromMaximumSegmentSize(size) {
+	static encodeMaximumSegmentSize(size) {
 		return ConverterUtil.fromU16BE(size)
 	}
 
@@ -102,7 +111,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toIPTypeOfService(buffer) {
+	static decodeIPTypeOfService(buffer) {
 		return ConverterUtil.toU8(buffer)
 	}
 
@@ -111,7 +120,7 @@ export class ConverterSocket {
 	 * @param {number} typeOfService
 	 * @returns {SPIBufferSource}
 	 */
-	static fromIPTypeOfService(typeOfService) {
+	static encodeIPTypeOfService(typeOfService) {
 		return ConverterUtil.fromU8(typeOfService)
 	}
 
@@ -120,7 +129,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toIPTimeToLive(buffer) {
+	static decodeIPTimeToLive(buffer) {
 		return ConverterUtil.toU8(buffer)
 	}
 
@@ -129,7 +138,7 @@ export class ConverterSocket {
 	 * @param {number} timeToLive
 	 * @returns {SPIBufferSource}
 	 */
-	static fromIPTimeToLive(timeToLive) {
+	static encodeIPTimeToLive(timeToLive) {
 		return ConverterUtil.fromU8(timeToLive)
 	}
 
@@ -137,7 +146,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {BufferSize}
 	 */
-	static toReceiveBufferSize(buffer) {
+	static decodeReceiveBufferSize(buffer) {
 		return ConverterUtil.toU8(buffer)
 	}
 
@@ -145,7 +154,8 @@ export class ConverterSocket {
 	 * @param {BufferSize} size
 	 * @returns {SPIBufferSource}
 	 */
-	static fromReceiveBufferSize(size) {
+	static encodeReceiveBufferSize(size) {
+		if(!isBufferSize(size)) { throw new Error('invalid buffer size') }
 		return ConverterUtil.fromU8(size)
 	}
 
@@ -153,7 +163,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {BufferSize}
 	 */
-	static toTransmitBufferSize(buffer) {
+	static decodeTransmitBufferSize(buffer) {
 		return ConverterUtil.toU8(buffer)
 	}
 
@@ -161,7 +171,8 @@ export class ConverterSocket {
 	 * @param {BufferSize} size
 	 * @returns {SPIBufferSource}
 	 */
-	static fromTransmitBufferSize(size) {
+	static encodeTransmitBufferSize(size) {
+		if(!isBufferSize(size)) { throw new Error('invalid buffer size') }
 		return ConverterUtil.fromU8(size)
 	}
 
@@ -169,7 +180,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toTXFreeSize(buffer) {
+	static decodeTXFreeSize(buffer) {
 		return ConverterUtil.toU16BE(buffer)
 	}
 
@@ -177,7 +188,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toTXReadPointer(buffer) {
+	static decodeTXReadPointer(buffer) {
 		return ConverterUtil.toU16BE(buffer)
 	}
 
@@ -185,7 +196,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toTXWritePointer(buffer) {
+	static decodeTXWritePointer(buffer) {
 		return ConverterUtil.toU16BE(buffer)
 	}
 
@@ -193,7 +204,7 @@ export class ConverterSocket {
 	 * @param {number} pointer
 	 * @returns {SPIBufferSource}
 	 */
-	static fromTXWritePointer(pointer) {
+	static encodeTXWritePointer(pointer) {
 		return ConverterUtil.fromU16BE(pointer)
 	}
 
@@ -201,7 +212,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toRXReceiveSize(buffer) {
+	static decodeRXReceiveSize(buffer) {
 		return ConverterUtil.toU16BE(buffer)
 	}
 
@@ -209,7 +220,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toRXReadPointer(buffer) {
+	static decodeRXReadPointer(buffer) {
 		return ConverterUtil.toU16BE(buffer)
 	}
 
@@ -217,7 +228,7 @@ export class ConverterSocket {
 	 * @param {number} pointer
 	 * @returns {SPIBufferSource}
 	 */
-	static fromRXReadPointer(pointer) {
+	static encodeRXReadPointer(pointer) {
 		return ConverterUtil.fromU16BE(pointer)
 	}
 
@@ -225,14 +236,14 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toRXWritePointer(buffer) {
+	static decodeRXWritePointer(buffer) {
 		return ConverterUtil.toU16BE(buffer)
 	}
 
 	/**
 	 * @param {SPIBufferSource} buffer
 	 */
-	static toInterruptMask(buffer) {
+	static decodeInterruptMask(buffer) {
 		const mask = ConverterUtil.toU8(buffer)
 
 		return {
@@ -244,7 +255,7 @@ export class ConverterSocket {
 	 * @param {} mask
 	 * @returns {SPIBufferSource}
 	 */
-	static fromInterruptMask(mask) {
+	static encodeInterruptMask(mask) {
 
 
 		return ConverterUtil.fromU8(value)
@@ -254,7 +265,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toFragmentOffsetInIPHeader(buffer) {
+	static decodeFragmentOffsetInIPHeader(buffer) {
 		return ConverterUtil.toU16BE(buffer)
 	}
 
@@ -262,7 +273,7 @@ export class ConverterSocket {
 	 * @param {number} offset
 	 * @returns {SPIBufferSource}
 	 */
-	static fromFragmentOffsetInIPHeader(offset) {
+	static encodeFragmentOffsetInIPHeader(offset) {
 		return ConverterUtil.fromU16BE(offset)
 	}
 
@@ -270,7 +281,7 @@ export class ConverterSocket {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toKeepAliveTimer(buffer) {
+	static decodeKeepAliveTimer(buffer) {
 		// todo units 5s
 		return ConverterUtil.toU8(buffer)
 	}
@@ -279,7 +290,7 @@ export class ConverterSocket {
 	 * @param {number} time
 	 * @returns {SPIBufferSource}
 	 */
-	static fromKeepAliveTimer(time) {
+	static encodeKeepAliveTimer(time) {
 		// todo units 5s
 		return ConverterUtil.fromU8(time)
 	}

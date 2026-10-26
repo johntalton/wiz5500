@@ -19,7 +19,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {Mode}
 	 */
-	static toMode(buffer) {
+	static decodeMode(buffer) {
 		const mode = ConverterUtil.toU8(buffer)
 
 		const reset = BitSmush.extractBits(mode, 7, 1) === 1
@@ -41,7 +41,7 @@ export class Converter {
 	 * @param {Mode} mode
 	 * @returns {SPIBufferSource}
 	 */
-	static fromMode(mode) {
+	static encodeMode(mode) {
 		const rst = mode.reset ? 1 : 0
 		const wol = mode.wakeOnLAN ? 1 : 0
 		const pb = mode.blockPing ? 1 : 0
@@ -60,7 +60,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toInterruptLowLevelTimer(buffer) {
+	static decodeInterruptLowLevelTimer(buffer) {
 		return ConverterUtil.toU16BE(buffer)
 	}
 
@@ -68,7 +68,7 @@ export class Converter {
 	 * @param {number} level
 	 * @returns {SPIBufferSource}
 	 */
-	static fromInterruptLowLevelTimer(level) {
+	static encodeInterruptLowLevelTimer(level) {
 		return ConverterUtil.fromU16BE(level)
 	}
 
@@ -76,7 +76,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {Interrupt}
 	 */
-	static toInterrupt(buffer) {
+	static decodeInterrupt(buffer) {
 		const interrupt = ConverterUtil.toU8(buffer)
 
 		return {
@@ -88,7 +88,7 @@ export class Converter {
 	 * @param {Interrupt} interrupt
 	 * @returns {SPIBufferSource}
 	 */
-	static fromInterrupt(interrupt) {
+	static encodeInterrupt(interrupt) {
 
 
 		return ConverterUtil.fromU8(value)
@@ -98,7 +98,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {InterruptMask}
 	 */
-	static toInterruptMask(buffer) {
+	static decodeInterruptMask(buffer) {
 		const mask = ConverterUtil.toU8(buffer)
 
 		return {
@@ -110,7 +110,7 @@ export class Converter {
 	 * @param {InterruptMask} interruptMask
 	 * @returns {SPIBufferSource}
 	 */
-	static fromInterruptMask(interruptMask) {
+	static encodeInterruptMask(interruptMask) {
 
 
 		return ConverterUtil.fromU8(value)
@@ -120,7 +120,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {SocketInterrupt}
 	 */
-	static toSocketInterrupt(buffer) {
+	static decodeSocketInterrupt(buffer) {
 		const interrupt = ConverterUtil.toU8(buffer)
 
 		return {
@@ -132,7 +132,7 @@ export class Converter {
 	 * @param {SocketInterrupt} socketInterrupt
 	 * @returns {SPIBufferSource}
 	 */
-	static fromSocketInterrupt(socketInterrupt) {
+	static encodeSocketInterrupt(socketInterrupt) {
 
 
 		return ConverterUtil.fromU8(value)
@@ -142,7 +142,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {SocketInterruptMask}
 	 */
-	static toSocketInterruptMask(buffer) {
+	static decodeSocketInterruptMask(buffer) {
 		const mask = ConverterUtil.toU8(buffer)
 
 		return {
@@ -154,7 +154,7 @@ export class Converter {
 	 * @param {SocketInterruptMask} socketInterruptMask
 	 * @returns {SPIBufferSource}
 	 */
-	static fromSocketInterruptMask(socketInterruptMask) {
+	static encodeSocketInterruptMask(socketInterruptMask) {
 
 
 		return ConverterUtil.fromU8(value)
@@ -164,7 +164,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toRetryTime(buffer) {
+	static decodeRetryTime(buffer) {
 		// todo units 100us
 		return ConverterUtil.toU16BE(buffer)
 	}
@@ -173,7 +173,7 @@ export class Converter {
 	 * @param {number} retryTime
 	 * @returns {SPIBufferSource}
 	 */
-	static fromRetryTime(retryTime) {
+	static encodeRetryTime(retryTime) {
 		// todo units 100us
 		return ConverterUtil.fromU16BE(retryTime)
 	}
@@ -182,7 +182,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toRetryCount(buffer) {
+	static decodeRetryCount(buffer) {
 		return ConverterUtil.toU8(buffer)
 	}
 
@@ -190,7 +190,7 @@ export class Converter {
 	 * @param {number} count
 	 * @returns {SPIBufferSource}
 	 */
-	static fromRetryCount(count) {
+	static encodeRetryCount(count) {
 		return ConverterUtil.fromU8(count)
 	}
 
@@ -198,7 +198,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toPPPLCPRequestTimer(buffer) {
+	static decodePPPLCPRequestTimer(buffer) {
 		// todo units 25ms
 		return ConverterUtil.toU8(buffer)
 	}
@@ -207,7 +207,7 @@ export class Converter {
 	 * @param {number} time
 	 * @returns {SPIBufferSource}
 	 */
-	static fromPPPLCPRequestTimer(time) {
+	static encodePPPLCPRequestTimer(time) {
 		// todo units 25ms
 		return ConverterUtil.fromU8(time)
 	}
@@ -216,7 +216,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toPPPLCPMagicNumber(buffer) {
+	static decodePPPLCPMagicNumber(buffer) {
 		return ConverterUtil.toU8(buffer)
 	}
 
@@ -224,7 +224,7 @@ export class Converter {
 	 * @param {number} magic
 	 * @returns {SPIBufferSource}
 	 */
-	static fromPPPLCPMagicNumber(magic) {
+	static encodePPPLCPMagicNumber(magic) {
 		return ConverterUtil.fromU8(magic)
 	}
 
@@ -232,7 +232,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toPPPSessionIdentification(buffer) {
+	static decodePPPSessionIdentification(buffer) {
 		return ConverterUtil.toU16BE(buffer)
 	}
 
@@ -240,7 +240,7 @@ export class Converter {
 	 * @param {number} id
 	 * @returns {SPIBufferSource}
 	 */
-	static fromPPPSessionIdentification(id) {
+	static encodePPPSessionIdentification(id) {
 		return ConverterUtil.fromU16BE(id)
 	}
 
@@ -248,7 +248,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toPPPMaximumSegmentSize(buffer) {
+	static decodePPPMaximumSegmentSize(buffer) {
 		return ConverterUtil.toU16BE(buffer)
 	}
 
@@ -256,7 +256,7 @@ export class Converter {
 	 * @param {number} size
 	 * @returns {SPIBufferSource}
 	 */
-	static fromPPPMaximumSegmentSize(size) {
+	static encodePPPMaximumSegmentSize(size) {
 		return ConverterUtil.fromU16BE(size)
 	}
 
@@ -264,7 +264,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {PHYConfigWithStatus}
 	 */
-	static toPHYConfig(buffer) {
+	static decodePHYConfig(buffer) {
 		const config = ConverterUtil.toU8(buffer)
 
 		const reset = BitSmush.extractBits(config, 7, 1) === 0
@@ -288,7 +288,7 @@ export class Converter {
 	 * @param {PHYConfig} phyConfig
 	 * @returns {SPIBufferSource}
 	 */
-	static fromPHYConfig(phyConfig) {
+	static encodePHYConfig(phyConfig) {
 		const reset = phyConfig.reset ? 0 : 1
 		const opmd = phyConfig.softwareConfiguredMode ? 1 : 0
 		const opmdc = phyConfig.mode & 0b111
@@ -302,7 +302,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static toChipVersion(buffer) {
+	static decodeChipVersion(buffer) {
 		return ConverterUtil.toU8(buffer)
 	}
 
