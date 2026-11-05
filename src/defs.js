@@ -111,3 +111,53 @@ export const HARDWARE_ADDRESS_SIZE = 6
 export const PORT_SIZE = 2
 
 export const BUFFER_SIZES = [ 0, 1, 2, 4, 8, 16 ]
+
+
+export const PHY_OPERATIONAL_MODE = /** @type {const} */ ({
+	HALF_DUPLEX_10BT: 0b000,
+	FULL_DUPLEX_10BT: 0b001,
+	HALF_DUPLEX_100BT: 0b010,
+	FULL_DUPLEX_100BT: 0b011,
+	HALF_DUPLEX_100BT_AUTO_NEGOTIATION: 0b100,
+	UNUSED: 0b101,
+	POWER_DOWN: 0b110,
+	AUTO_NEGOTIATION: 0b111
+})
+
+export const SOCKET_PROTOCOL = /** @type {const} */ ({
+	CLOSED: 0b0000,
+	TCP: 0b0001,
+	UDP: 0b0010,
+	MAC_RAW: 0b0100 // restrict to Socket 0
+})
+
+export const SOCKET_COMMANDS = /** @type {const} */ ({
+	NOOP: 0x00,
+	OPEN: 0x01,
+	LISTEN: 0x02,
+	CONNECT: 0x04,
+	DISCONNECT: 0x08,
+	CLOSE: 0x10,
+	SEND: 0x20,
+	SEND_MAC: 0x21,
+	SEND_KEEP: 0x22,
+	RECV: 0x40
+})
+
+export const SOCKET_STATUS = /** @type {const} */ ({
+	CLOSED: 0x00,
+	INIT: 0x13,
+	LISTEN: 0x14,
+	ESTABLISHED: 0x17,
+	CLOSE_WAIT: 0x1C,
+	UDP: 0x22,
+	MAC_RAW: 0x42,
+
+	// temporary status
+	SYN_SENT: 0x15,
+	SYN_RECV: 0x16,
+	FIN_WAIT: 0x18,
+	CLOSING: 0x1A,
+	TIME_WAIT: 0x1B,
+	LAST_ACK: 0x1D
+})

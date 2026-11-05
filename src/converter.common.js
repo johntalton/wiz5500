@@ -9,10 +9,19 @@ import { ConverterUtil } from './converter.util.js'
 	SocketInterrupt,
 	SocketInterruptMask,
 	PHYConfig,
-	PHYConfigWithStatus
+	PHYConfigWithStatus,
+	PHYOperationMode
 } from './types.js' */
-/** @import { SPIBufferSource } from './spi.js' */
+/** @import { SPIBufferSource } from '@johntalton/and-other-delights' */
 
+
+/**
+ * @param {number} mode
+ * @returns {mode is PHYOperationMode}
+ */
+export function isOperationMode(mode) {
+	return mode <= 0b111 && mode >= 0
+}
 
 export class Converter {
 	/**
@@ -20,7 +29,7 @@ export class Converter {
 	 * @returns {Mode}
 	 */
 	static decodeMode(buffer) {
-		const mode = ConverterUtil.toU8(buffer)
+		const mode = ConverterUtil.decodeU8(buffer)
 
 		const reset = BitSmush.extractBits(mode, 7, 1) === 1
 		const wakeOnLAN = BitSmush.extractBits(mode, 5, 1) === 1
@@ -52,7 +61,8 @@ export class Converter {
 			[ [7,1], [5,1], [4,1], [3,1], [1,1] ],
 			[ rst, wol, pb, pppoe, farp ])
 
-		return ConverterUtil.fromU8(value)
+		console.log('mode parts', value)
+		return ConverterUtil.encodeU8(value)
 	}
 
 
@@ -61,7 +71,7 @@ export class Converter {
 	 * @returns {number}
 	 */
 	static decodeInterruptLowLevelTimer(buffer) {
-		return ConverterUtil.toU16BE(buffer)
+		return ConverterUtil.decodeU16BE(buffer)
 	}
 
 	/**
@@ -69,7 +79,7 @@ export class Converter {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeInterruptLowLevelTimer(level) {
-		return ConverterUtil.fromU16BE(level)
+		return ConverterUtil.encodeU16BE(level)
 	}
 
 	/**
@@ -77,21 +87,39 @@ export class Converter {
 	 * @returns {Interrupt}
 	 */
 	static decodeInterrupt(buffer) {
-		const interrupt = ConverterUtil.toU8(buffer)
+		const interrupt = ConverterUtil.decodeU8(buffer)
+
+		const conflict = BitSmush.extractBits(interrupt, 7, 1) === 1
+		const unreachable = BitSmush.extractBits(interrupt, 6, 1) === 1
+		const closedPPPoE = BitSmush.extractBits(interrupt, 5, 1) === 1
+		const magicWOL = BitSmush.extractBits(interrupt, 4, 1) === 1
 
 		return {
-
+			conflict,
+			unreachable,
+			closedPPPoE,
+			magicWOL
 		}
 	}
 
 	/**
-	 * @param {Interrupt} interrupt
+	 * @param {Partial<Interrupt>} interrupt
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeInterrupt(interrupt) {
+		const CLEAR = 1
+		const PRESERVE = 0
 
+		const conflict = interrupt.conflict === true ? CLEAR : PRESERVE
+		const unreachable = interrupt.unreachable === true ? CLEAR : PRESERVE
+		const closedPPPoE = interrupt.closedPPPoE === true ? CLEAR : PRESERVE
+		const magicWOL = interrupt.magicWOL === true ? CLEAR : PRESERVE
 
-		return ConverterUtil.fromU8(value)
+		const value = BitSmush.smushBits(
+			[ [ 7,1 ], [ 6,1 ], [ 5,1 ], [ 4,1 ] ],
+			[ conflict, unreachable, closedPPPoE, magicWOL ])
+
+		return ConverterUtil.encodeU8(value)
 	}
 
 	/**
@@ -99,10 +127,18 @@ export class Converter {
 	 * @returns {InterruptMask}
 	 */
 	static decodeInterruptMask(buffer) {
-		const mask = ConverterUtil.toU8(buffer)
+		const mask = ConverterUtil.decodeU8(buffer)
+
+		const enableConflict = BitSmush.extractBits(mask, 7, 1) === 1
+		const enableUnreachable = BitSmush.extractBits(mask, 6, 1) === 1
+		const enableClosedPPPoE = BitSmush.extractBits(mask, 5, 1) === 1
+		const enableMagicWOL = BitSmush.extractBits(mask, 4, 1) === 1
 
 		return {
-
+			enableConflict,
+			enableUnreachable,
+			enableClosedPPPoE,
+			enableMagicWOL
 		}
 	}
 
@@ -111,9 +147,16 @@ export class Converter {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeInterruptMask(interruptMask) {
+		const enableConflict = interruptMask.enableConflict ? 1 : 0
+		const enableUnreachable = interruptMask.enableUnreachable ? 1 : 0
+		const enableClosedPPPoE = interruptMask.enableClosedPPPoE ? 1 : 0
+		const enableMagicWOL = interruptMask.enableMagicWOL ? 1 : 0
 
+		const value = BitSmush.smushBits(
+			[ [ 7,1 ], [ 6,1 ], [ 5,1 ], [ 4,1 ] ],
+			[ enableConflict, enableUnreachable, enableClosedPPPoE, enableMagicWOL ])
 
-		return ConverterUtil.fromU8(value)
+		return ConverterUtil.encodeU8(value)
 	}
 
 	/**
@@ -121,33 +164,48 @@ export class Converter {
 	 * @returns {SocketInterrupt}
 	 */
 	static decodeSocketInterrupt(buffer) {
-		const interrupt = ConverterUtil.toU8(buffer)
+		const interrupt = ConverterUtil.decodeU8(buffer)
 
-		return {
+		return BitSmush.unSmushBits(
+			[ [ 0,1 ], [ 1,1 ], [ 2,1 ], [ 3,1 ], [ 4,1 ], [ 5,1 ], [ 6,1 ], [ 7,1 ] ],
+			interrupt)
+				.map(value => value === 1)
 
-		}
+		// const s0 = BitSmush.extractBits(interrupt, 0, 1) === 1
+		// const s1 = BitSmush.extractBits(interrupt, 1, 1) === 1
+		// const s2 = BitSmush.extractBits(interrupt, 2, 1) === 1
+		// const s3 = BitSmush.extractBits(interrupt, 3, 1) === 1
+		// const s4 = BitSmush.extractBits(interrupt, 4, 1) === 1
+		// const s5 = BitSmush.extractBits(interrupt, 5, 1) === 1
+		// const s6 = BitSmush.extractBits(interrupt, 6, 1) === 1
+		// const s7 = BitSmush.extractBits(interrupt, 7, 1) === 1
+
+		// return [
+		// 	s0, s1, s2, s3, s4, s5, s6, s7
+		// ]
 	}
 
-	/**
-	 * @param {SocketInterrupt} socketInterrupt
-	 * @returns {SPIBufferSource}
-	 */
-	static encodeSocketInterrupt(socketInterrupt) {
+	// /**
+	//  * @param {SocketInterrupt} socketInterrupt
+	//  * @returns {SPIBufferSource}
+	//  */
+	// static encodeSocketInterrupt(socketInterrupt) {
 
 
-		return ConverterUtil.fromU8(value)
-	}
+	// 	return ConverterUtil.encodeU8(value)
+	// }
 
 	/**
 	 * @param {SPIBufferSource} buffer
 	 * @returns {SocketInterruptMask}
 	 */
 	static decodeSocketInterruptMask(buffer) {
-		const mask = ConverterUtil.toU8(buffer)
+		const mask = ConverterUtil.decodeU8(buffer)
 
-		return {
-
-		}
+		return BitSmush.unSmushBits(
+			[ [ 0,1 ], [ 1,1 ], [ 2,1 ], [ 3,1 ], [ 4,1 ], [ 5,1 ], [ 6,1 ], [ 7,1 ] ],
+			mask)
+				.map(value => value === 1)
 	}
 
 	/**
@@ -155,9 +213,12 @@ export class Converter {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeSocketInterruptMask(socketInterruptMask) {
+		const value = BitSmush.smushBits(
+			[ [ 0,1 ], [ 1,1 ], [ 2,1 ], [ 3,1 ], [ 4,1 ], [ 5,1 ], [ 6,1 ], [ 7,1 ] ],
+			socketInterruptMask.map(value => (value ? 1 : 0))
+		)
 
-
-		return ConverterUtil.fromU8(value)
+		return ConverterUtil.encodeU8(value)
 	}
 
 	/**
@@ -166,7 +227,7 @@ export class Converter {
 	 */
 	static decodeRetryTime(buffer) {
 		// todo units 100us
-		return ConverterUtil.toU16BE(buffer)
+		return ConverterUtil.decodeU16BE(buffer)
 	}
 
 	/**
@@ -175,7 +236,7 @@ export class Converter {
 	 */
 	static encodeRetryTime(retryTime) {
 		// todo units 100us
-		return ConverterUtil.fromU16BE(retryTime)
+		return ConverterUtil.encodeU16BE(retryTime)
 	}
 
 	/**
@@ -183,7 +244,7 @@ export class Converter {
 	 * @returns {number}
 	 */
 	static decodeRetryCount(buffer) {
-		return ConverterUtil.toU8(buffer)
+		return ConverterUtil.decodeU8(buffer)
 	}
 
 	/**
@@ -191,41 +252,41 @@ export class Converter {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeRetryCount(count) {
-		return ConverterUtil.fromU8(count)
+		return ConverterUtil.encodeU8(count)
 	}
 
 	/**
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static decodePPPLCPRequestTimer(buffer) {
+	static decodePPPLinkControlProtocolRequestTimer(buffer) {
 		// todo units 25ms
-		return ConverterUtil.toU8(buffer)
+		return ConverterUtil.decodeU8(buffer)
 	}
 
 	/**
 	 * @param {number} time
 	 * @returns {SPIBufferSource}
 	 */
-	static encodePPPLCPRequestTimer(time) {
+	static encodePPPLinkControlProtocolRequestTimer(time) {
 		// todo units 25ms
-		return ConverterUtil.fromU8(time)
+		return ConverterUtil.encodeU8(time)
 	}
 
 	/**
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static decodePPPLCPMagicNumber(buffer) {
-		return ConverterUtil.toU8(buffer)
+	static decodePPPLinkControlProtocolMagicNumber(buffer) {
+		return ConverterUtil.decodeU8(buffer)
 	}
 
 	/**
 	 * @param {number} magic
 	 * @returns {SPIBufferSource}
 	 */
-	static encodePPPLCPMagicNumber(magic) {
-		return ConverterUtil.fromU8(magic)
+	static encodePPPLinkControlProtocolMagicNumber(magic) {
+		return ConverterUtil.encodeU8(magic)
 	}
 
 	/**
@@ -233,7 +294,7 @@ export class Converter {
 	 * @returns {number}
 	 */
 	static decodePPPSessionIdentification(buffer) {
-		return ConverterUtil.toU16BE(buffer)
+		return ConverterUtil.decodeU16BE(buffer)
 	}
 
 	/**
@@ -241,7 +302,7 @@ export class Converter {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodePPPSessionIdentification(id) {
-		return ConverterUtil.fromU16BE(id)
+		return ConverterUtil.encodeU16BE(id)
 	}
 
 	/**
@@ -249,7 +310,7 @@ export class Converter {
 	 * @returns {number}
 	 */
 	static decodePPPMaximumSegmentSize(buffer) {
-		return ConverterUtil.toU16BE(buffer)
+		return ConverterUtil.decodeU16BE(buffer)
 	}
 
 	/**
@@ -257,7 +318,7 @@ export class Converter {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodePPPMaximumSegmentSize(size) {
-		return ConverterUtil.fromU16BE(size)
+		return ConverterUtil.encodeU16BE(size)
 	}
 
 	/**
@@ -265,7 +326,7 @@ export class Converter {
 	 * @returns {PHYConfigWithStatus}
 	 */
 	static decodePHYConfig(buffer) {
-		const config = ConverterUtil.toU8(buffer)
+		const config = ConverterUtil.decodeU8(buffer)
 
 		const reset = BitSmush.extractBits(config, 7, 1) === 0
 		const softwareConfiguredMode = BitSmush.extractBits(config, 6, 1) === 1
@@ -273,6 +334,8 @@ export class Converter {
 		const fullDuplex = BitSmush.extractBits(config, 2, 1) === 1
 		const highSpeed = BitSmush.extractBits(config, 1, 1) === 1
 		const up = BitSmush.extractBits(config, 0, 1) === 1
+
+		if(!isOperationMode(mode)) { throw new Error('unknown operational mode') }
 
 		return {
 			reset,
@@ -295,7 +358,7 @@ export class Converter {
 
 		const config = BitSmush.smushBits([[ 7,1 ], [ 6,1 ], [ 5,3 ]], [ reset, opmd, opmdc ])
 
-		return ConverterUtil.fromU8(config)
+		return ConverterUtil.encodeU8(config)
 	}
 
 	/**
@@ -303,12 +366,7 @@ export class Converter {
 	 * @returns {number}
 	 */
 	static decodeChipVersion(buffer) {
-		return ConverterUtil.toU8(buffer)
+		return ConverterUtil.decodeU8(buffer)
 	}
-
-
-
-
-
 }
 

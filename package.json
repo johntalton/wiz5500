@@ -21,10 +21,11 @@
     "coverage": "c8 --src src --check-coverage --statements 95 --branches 95 --functions 95 --lines 95 -r lcovonly -r text node --test test/**/*.test.js"
   },
   "devDependencies": {
+    "@johntalton/and-other-delights": "../and-other-delights",
     "@biomejs/biome": "^2.6.2",
     "c8": "^12.0.0"
   },
   "dependencies": {
-    "@johntalton/bitsmush": "^1.0.4"
+    "@johntalton/bitsmush": "^1.0.6"
   }
 }

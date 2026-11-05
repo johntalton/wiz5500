@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/style/noNestedTernary: just cause */
 import { ADDRESS_SIZE, HARDWARE_ADDRESS_SIZE } from './defs.js'
 
-/** @import { SPIBufferSource } from './spi.js' */
+/** @import { SPIBufferSource } from '@johntalton/and-other-delights' */
 /** @import {
 	Address,
 	AddressInput,
@@ -27,6 +27,7 @@ export function parseDotQuad(address) {
 
 /**
  * @param {string} address
+ * @returns {[ number, number, number, number, number, number ]|undefined}
  */
 export function parseHardwareAddress(address) {
 	if(address === undefined) { return undefined }
@@ -34,6 +35,8 @@ export function parseHardwareAddress(address) {
 	const parts = address
 		.split(':')
 		.map(part => Number.parseInt(part, 16))
+
+	if(parts.length !== HARDWARE_ADDRESS_SIZE) { throw new Error('invalid HW address') }
 
 	const outOfRange = !parts.every(part => ((part <= 255) && (part >= 0)))
 	if(outOfRange) { throw new RangeError('invalid dot quad range') }
@@ -132,6 +135,8 @@ export class ConverterUtil {
 		const ok = parts.every(part => part <= 255 && part >= 0)
 		if(!ok) { throw new Error('invalid parts') }
 
+		// console.log('encode address parts', parts)
+
 		return Uint8Array.from(parts)
 	}
 
@@ -190,7 +195,7 @@ export class ConverterUtil {
 	 * @returns {number}
 	 */
 	static decodePort(buffer) {
-		return ConverterUtil.toU16BE(buffer)
+		return ConverterUtil.decodeU16BE(buffer)
 	}
 
 	/**
@@ -198,6 +203,6 @@ export class ConverterUtil {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodePort(port) {
-		return ConverterUtil.fromU16BE(port)
+		return ConverterUtil.encodeU16BE(port)
 	}
 }
