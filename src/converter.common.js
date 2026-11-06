@@ -14,6 +14,7 @@ import { ConverterUtil } from './converter.util.js'
 } from './types.js' */
 /** @import { SPIBufferSource } from '@johntalton/and-other-delights' */
 
+export const RETRY_TIME_UNITS_US = 100
 
 /**
  * @param {number} mode
@@ -225,8 +226,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static decodeRetryTime(buffer) {
-		// todo units 100us
+	static _decodeRetryTime(buffer) {
 		return ConverterUtil.decodeU16BE(buffer)
 	}
 
@@ -234,8 +234,27 @@ export class Converter {
 	 * @param {number} retryTime
 	 * @returns {SPIBufferSource}
 	 */
-	static encodeRetryTime(retryTime) {
-		// todo units 100us
+	static _encodeRetryTime(retryTime) {
+		return ConverterUtil.encodeU16BE(retryTime)
+	}
+
+	/**
+	 * @param {SPIBufferSource} buffer
+	 * @returns {Temporal.Duration}
+	 */
+	static decodeRetryTime(buffer) {
+		const retryTime = ConverterUtil.decodeU16BE(buffer)
+		return Temporal.Duration.from({
+			microseconds: retryTime * RETRY_TIME_UNITS_US
+		})
+	}
+
+	/**
+	 * @param {Temporal.Duration} retryTimeDuration
+	 * @returns {SPIBufferSource}
+	 */
+	static encodeRetryTime(retryTimeDuration) {
+		const retryTime = retryTimeDuration.total('microseconds') / RETRY_TIME_UNITS_US
 		return ConverterUtil.encodeU16BE(retryTime)
 	}
 

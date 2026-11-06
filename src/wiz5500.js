@@ -214,7 +214,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @returns {Promise<number>}
+	 * @returns {Promise<Temporal.Duration>}
 	 */
 	async readRetryTime() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.RETRY_TIME, 2)
@@ -222,7 +222,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} retryTime
+	 * @param {Temporal.Duration} retryTime
 	 * @returns {Promise<void>}
 	 */
 	async writeRetryTime(retryTime) {
