@@ -16,8 +16,8 @@ import {
 	Mode,
 	Address,
 	AddressInput,
-	HardwareAddress,
 	HardwareAddressInput,
+	HardwareAddressOutput,
 	Interrupt,
 	InterruptMask,
 	SocketInterrupt,
@@ -32,6 +32,7 @@ import {
 	SocketSocketInterrupt,
 	SocketSocketInterruptMask
 } from './types.js' */
+/** @import { CommonBufferSource } from './common.js' */
 
 export class Wiz5500 {
 	/** @type {SPIBus} */
@@ -94,7 +95,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @returns {Promise<HardwareAddress>}
+	 * @returns {Promise<HardwareAddressOutput>}
 	 */
 	async readSourceHardwareAddress() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.SOURCE_HARDWARE_ADDRESS, HARDWARE_ADDRESS_SIZE)
@@ -281,7 +282,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @returns {Promise<HardwareAddress>}
+	 * @returns {Promise<HardwareAddressOutput>}
 	 */
 	async readPPPDestinationMACAddress() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.PPP_DESTINATION_MAC_ADDRESS, HARDWARE_ADDRESS_SIZE)
@@ -464,7 +465,7 @@ export class Wiz5500 {
 
 	/**
 	 * @param {number} socketNumber
-	 * @returns {Promise<HardwareAddress>}
+	 * @returns {Promise<HardwareAddressOutput>}
 	 */
 	async readSocketDestinationHardwareAddress(socketNumber) {
 		const buffer = await Common.readSocket(this.#bus, socketNumber, SOCKET_REGISTER.SOCKET_DESTINATION_HARDWARE_ADDRESS, HARDWARE_ADDRESS_SIZE)
@@ -747,5 +748,19 @@ export class Wiz5500 {
 	async writeSocketKeepAliveTimer(socketNumber, time) {
 		const buffer = ConverterSocket.encodeKeepAliveTimer(time)
 		return Common.writeSocket(this.#bus, socketNumber, SOCKET_REGISTER.SOCKET_KEEP_ALIVE_TIMER, buffer)
+	}
+
+	//
+	//
+	//
+
+	/**
+	 * @param {number} socketNumber
+	 * @param {number} address
+	 * @param {number} length
+	 * @returns {Promise<CommonBufferSource>}
+	 */
+	async readSocketRX(socketNumber, address, length) {
+		return Common.readSocketRX(this.#bus, socketNumber, address, length)
 	}
 }

@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/style/noExcessiveLinesPerFile: <explanation> */
+/** biome-ignore-all lint/style/noExcessiveLinesPerFile: full converter */
 import { BitSmush } from '@johntalton/bitsmush'
 import { ConverterUtil } from './converter.util.js'
 
@@ -61,7 +61,7 @@ export class Converter {
 			[ [7,1], [5,1], [4,1], [3,1], [1,1] ],
 			[ rst, wol, pb, pppoe, farp ])
 
-		console.log('mode parts', value)
+		// console.log('mode parts', value)
 		return ConverterUtil.encodeU8(value)
 	}
 
@@ -215,7 +215,7 @@ export class Converter {
 	static encodeSocketInterruptMask(socketInterruptMask) {
 		const value = BitSmush.smushBits(
 			[ [ 0,1 ], [ 1,1 ], [ 2,1 ], [ 3,1 ], [ 4,1 ], [ 5,1 ], [ 6,1 ], [ 7,1 ] ],
-			socketInterruptMask.map(value => (value ? 1 : 0))
+			socketInterruptMask.map(val => (val ? 1 : 0))
 		)
 
 		return ConverterUtil.encodeU8(value)

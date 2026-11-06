@@ -80,7 +80,7 @@ export class Common {
 	static async writeRegister(bus, block, address, buffer) {
 		const frame = Common.#frame(block, address, true, FRAME_BYTE_MODE_VARIABLE, buffer)
 		// console.log('writeRegister frame', frame)
-		const result = await bus.transfer({
+		const _result = await bus.transfer({
 			sendBuffer: frame,
 			receiveBufferLength: 0
 		})

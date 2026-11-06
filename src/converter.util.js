@@ -5,8 +5,8 @@ import { ADDRESS_SIZE, HARDWARE_ADDRESS_SIZE } from './defs.js'
 /** @import {
 	Address,
 	AddressInput,
-	HardwareAddress,
-	HardwareAddressInput
+	HardwareAddressInput,
+	HardwareAddressOutput
 } from './types.js' */
 
 /**
@@ -142,7 +142,7 @@ export class ConverterUtil {
 
 	/**
 	 * @param {SPIBufferSource} buffer
-	 * @returns {HardwareAddress}
+	 * @returns {HardwareAddressOutput}
 	*/
 	static decodeHardwareAddress(buffer) {
 		const u8 = ArrayBuffer.isView(buffer) ?
@@ -158,8 +158,11 @@ export class ConverterUtil {
 		if(e === undefined) { throw new Error('undefined hardware address part (e)') }
 		if(f === undefined) { throw new Error('undefined hardware address part (f))') }
 
+		const canonical = [...u8].map(octet => octet.toString(16).padStart(2, '0')).join(':')
+
 		return {
-			a, b, c, d, e, f
+			a, b, c, d, e, f,
+			canonical
 		}
 	}
 

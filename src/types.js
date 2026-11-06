@@ -86,6 +86,8 @@
  * @property {number} f
 */
 
+/** @typedef {HardwareAddress & { canonical: string }} HardwareAddressOutput */
+
 /** @typedef {HardwareAddress | Array<number> | string} HardwareAddressInput */
 
 
