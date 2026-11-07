@@ -16,6 +16,8 @@ import { ConverterUtil } from './converter.util.js'
 
 export const RETRY_TIME_UNITS_US = 100
 
+export const PLL_CLOCK_MHZ = 150
+
 /**
  * @param {number} mode
  * @returns {mode is PHYOperationMode}
@@ -66,7 +68,6 @@ export class Converter {
 		return ConverterUtil.encodeU8(value)
 	}
 
-
 	/**
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
@@ -80,6 +81,34 @@ export class Converter {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeInterruptLowLevelTimer(level) {
+		return ConverterUtil.encodeU16BE(level)
+	}
+
+	/**
+	 * @param {SPIBufferSource} buffer
+	 * @returns {Temporal.Duration}
+	 */
+	static decodeInterruptAssertWaitTime(buffer) {
+		const level = ConverterUtil.decodeU16BE(buffer)
+		if(level === 0) { return new Temporal.Duration() }
+
+		const nanoseconds = Math.round((4000 * (level + 1)) / PLL_CLOCK_MHZ)
+		return Temporal.Duration.from({ nanoseconds })
+	}
+
+	/**
+	 * @param {Temporal.Duration} duration
+	 * @returns {SPIBufferSource}
+	 */
+	static encodeInterruptAssertWaitTime(duration) {
+		if(duration.blank) { return ConverterUtil.encodeU16BE(0) }
+
+		const nanoseconds = duration.total('nanoseconds')
+		const level = Math.round((nanoseconds * PLL_CLOCK_MHZ) / 4000 - 1)
+
+		if(level <= 0) { throw new RangeError('duration too small') }
+		if(level > 0xFF_FF) { throw new RangeError('duration too large') }
+
 		return ConverterUtil.encodeU16BE(level)
 	}
 

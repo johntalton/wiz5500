@@ -146,6 +146,23 @@ export class Wiz5500 {
 	}
 
 	/**
+	 * @returns {Promise<Temporal.Duration>}
+	 */
+	async readInterruptAssertWaitTime() {
+		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.INTERRUPT_LOW_LEVEL_TIMER, 2)
+		return Converter.decodeInterruptAssertWaitTime(buffer)
+	}
+
+	/**
+	 * @param {Temporal.Duration} duration
+	 * @returns {Promise<void>}
+	 */
+	async writeInterruptAssertWaitTime(duration) {
+		const buffer = Converter.encodeInterruptAssertWaitTime(duration)
+		return Common.writeCommon(this.#bus, COMMON_REGISTERS.INTERRUPT_LOW_LEVEL_TIMER, buffer)
+	}
+
+	/**
 	 * @returns {Promise<Interrupt>}
 	 */
 	async readInterrupt() {

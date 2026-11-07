@@ -7,7 +7,8 @@
     "ethernet"
   ],
   "exports": {
-    ".": "./src/index.js"
+    ".": "./src/index.js",
+    "./converter": "./converters.js"
   },
   "files": [
     "src/**/*.js"
