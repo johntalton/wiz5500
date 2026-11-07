@@ -8,7 +8,7 @@
   ],
   "exports": {
     ".": "./src/index.js",
-    "./converter": "./converters.js"
+    "./converter": "./src/converter.js"
   },
   "files": [
     "src/**/*.js"

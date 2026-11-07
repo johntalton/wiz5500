@@ -39,7 +39,7 @@ export function parseHardwareAddress(address) {
 	if(parts.length !== HARDWARE_ADDRESS_SIZE) { throw new Error('invalid HW address') }
 
 	const outOfRange = !parts.every(part => ((part <= 255) && (part >= 0)))
-	if(outOfRange) { throw new RangeError('invalid dot quad range') }
+	if(outOfRange) { throw new RangeError('invalid HW octet range') }
 
 	return parts
 }
@@ -51,7 +51,7 @@ export class ConverterUtil {
 	 */
 	static decodeU16BE(buffer) {
 		const dv = ArrayBuffer.isView(buffer) ?
-			new DataView(buffer.buffer, buffer.byteOffset) :
+			new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
 			new DataView(buffer)
 
 		return dv.getUint16(0, false)
@@ -62,6 +62,8 @@ export class ConverterUtil {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeU16BE(value) {
+		if(value < 0) { throw new RangeError('value must be positive') }
+		if(value > 0xFF_FF) { throw new RangeError('value exceeds 16-bit') }
 		const dv = new DataView(new ArrayBuffer(2))
 		dv.setUint16(0, value, false)
 		return dv
@@ -73,12 +75,12 @@ export class ConverterUtil {
 	 */
 	static decodeU8(buffer) {
 		const u8 = ArrayBuffer.isView(buffer) ?
-			new Uint8Array(buffer.buffer, buffer.byteOffset) :
+			new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
 			new Uint8Array(buffer)
 
 		const [ value ] = u8
 
-		if(value === undefined) { throw new Error('undefined value') }
+		if(value === undefined) { throw new Error('undefined buffer value') }
 
 		return value
 	}
@@ -88,6 +90,8 @@ export class ConverterUtil {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeU8(value) {
+		if(value < 0) { throw new RangeError('value must be positive') }
+		if(value > 0xFF) { throw new RangeError('value exceeds max') }
 		return Uint8ClampedArray.from([ value ])
 	}
 
@@ -101,7 +105,7 @@ export class ConverterUtil {
 	 */
 	static decodeAddress(buffer) {
 		const u8 = ArrayBuffer.isView(buffer) ?
-			new Uint8Array(buffer.buffer, buffer.byteOffset) :
+			new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
 			new Uint8Array(buffer)
 
 		const [ a, b, c, d ] = u8
@@ -146,7 +150,7 @@ export class ConverterUtil {
 	*/
 	static decodeHardwareAddress(buffer) {
 		const u8 = ArrayBuffer.isView(buffer) ?
-			new Uint8Array(buffer.buffer, buffer.byteOffset) :
+			new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
 			new Uint8Array(buffer)
 
 		const [ a, b, c, d, e, f ] = u8

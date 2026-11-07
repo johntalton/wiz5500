@@ -18,6 +18,8 @@ export const RETRY_TIME_UNITS_US = 100
 
 export const PLL_CLOCK_MHZ = 150
 
+export const PPP_LCP_REQUEST_TIMER_UNITS_MS = 25
+
 /**
  * @param {number} mode
  * @returns {mode is PHYOperationMode}
@@ -26,7 +28,7 @@ export function isOperationMode(mode) {
 	return mode <= 0b111 && mode >= 0
 }
 
-export class Converter {
+export class ConverterCommon {
 	/**
 	 * @param {SPIBufferSource} buffer
 	 * @returns {Mode}
@@ -72,7 +74,7 @@ export class Converter {
 	 * @param {SPIBufferSource} buffer
 	 * @returns {number}
 	 */
-	static decodeInterruptLowLevelTimer(buffer) {
+	static _decodeInterruptLowLevelTimer(buffer) {
 		return ConverterUtil.decodeU16BE(buffer)
 	}
 
@@ -80,7 +82,7 @@ export class Converter {
 	 * @param {number} level
 	 * @returns {SPIBufferSource}
 	 */
-	static encodeInterruptLowLevelTimer(level) {
+	static _encodeInterruptLowLevelTimer(level) {
 		return ConverterUtil.encodeU16BE(level)
 	}
 
@@ -90,7 +92,10 @@ export class Converter {
 	 */
 	static decodeInterruptAssertWaitTime(buffer) {
 		const level = ConverterUtil.decodeU16BE(buffer)
-		if(level === 0) { return new Temporal.Duration() }
+		if(level === 0) {
+			// new duration are blank (aka zero)
+			return new Temporal.Duration()
+		}
 
 		const nanoseconds = Math.round((4000 * (level + 1)) / PLL_CLOCK_MHZ)
 		return Temporal.Duration.from({ nanoseconds })
@@ -101,6 +106,9 @@ export class Converter {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeInterruptAssertWaitTime(duration) {
+		if(duration.sign === -1) { throw new RangeError('duration must be positive') }
+
+		// blank checks for zero
 		if(duration.blank) { return ConverterUtil.encodeU16BE(0) }
 
 		const nanoseconds = duration.total('nanoseconds')
@@ -283,7 +291,10 @@ export class Converter {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeRetryTime(retryTimeDuration) {
+		if(retryTimeDuration.sign === -1) { throw new RangeError('duration must be positive') }
 		const retryTime = retryTimeDuration.total('microseconds') / RETRY_TIME_UNITS_US
+		// todo round to integer
+		// check bounds for min/max
 		return ConverterUtil.encodeU16BE(retryTime)
 	}
 
@@ -305,20 +316,23 @@ export class Converter {
 
 	/**
 	 * @param {SPIBufferSource} buffer
-	 * @returns {number}
+	 * @returns {Temporal.Duration}
 	 */
 	static decodePPPLinkControlProtocolRequestTimer(buffer) {
-		// todo units 25ms
-		return ConverterUtil.decodeU8(buffer)
+		const timer = ConverterUtil.decodeU8(buffer)
+		const milliseconds = timer * PPP_LCP_REQUEST_TIMER_UNITS_MS
+		return Temporal.Duration.from({ milliseconds })
 	}
 
 	/**
-	 * @param {number} time
+	 * @param {Temporal.Duration} duration
 	 * @returns {SPIBufferSource}
 	 */
-	static encodePPPLinkControlProtocolRequestTimer(time) {
-		// todo units 25ms
-		return ConverterUtil.encodeU8(time)
+	static encodePPPLinkControlProtocolRequestTimer(duration) {
+		if(duration.sign === -1) { throw new RangeError('duration must be positive') }
+		const timer = Math.round(duration.total('milliseconds') / PPP_LCP_REQUEST_TIMER_UNITS_MS)
+		if(timer > 0xFF) { throw new RangeError('duration exceeds max') }
+		return ConverterUtil.encodeU8(timer)
 	}
 
 	/**

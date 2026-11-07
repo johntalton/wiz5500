@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/style/noExcessiveLinesPerFile: main interface */
 import { Common } from './common.js'
-import { Converter } from './converter.common.js'
+import { ConverterCommon } from './converter.common.js'
 import { ConverterSocket } from './converter.socket.js'
 import { ConverterUtil } from './converter.util.js'
 import {
@@ -48,7 +48,7 @@ export class Wiz5500 {
 	 */
 	async readMode() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.MODE, 1)
-		return Converter.decodeMode(buffer)
+		return ConverterCommon.decodeMode(buffer)
 	}
 
 	/**
@@ -56,7 +56,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeMode(mode) {
-		const buffer = Converter.encodeMode(mode)
+		const buffer = ConverterCommon.encodeMode(mode)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.MODE, buffer)
 	}
 
@@ -131,17 +131,17 @@ export class Wiz5500 {
 	/**
 	 * @returns {Promise<number>}
 	 */
-	async readInterruptLowLevelTimer() {
+	async _readInterruptLowLevelTimer() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.INTERRUPT_LOW_LEVEL_TIMER, 2)
-		return Converter.decodeInterruptLowLevelTimer(buffer)
+		return ConverterCommon._decodeInterruptLowLevelTimer(buffer)
 	}
 
 	/**
 	 * @param {number} level
 	 * @returns {Promise<void>}
 	 */
-	async writeInterruptLowLevelTimer(level) {
-		const buffer = Converter.encodeInterruptLowLevelTimer(level)
+	async _writeInterruptLowLevelTimer(level) {
+		const buffer = ConverterCommon._encodeInterruptLowLevelTimer(level)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.INTERRUPT_LOW_LEVEL_TIMER, buffer)
 	}
 
@@ -150,7 +150,7 @@ export class Wiz5500 {
 	 */
 	async readInterruptAssertWaitTime() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.INTERRUPT_LOW_LEVEL_TIMER, 2)
-		return Converter.decodeInterruptAssertWaitTime(buffer)
+		return ConverterCommon.decodeInterruptAssertWaitTime(buffer)
 	}
 
 	/**
@@ -158,7 +158,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeInterruptAssertWaitTime(duration) {
-		const buffer = Converter.encodeInterruptAssertWaitTime(duration)
+		const buffer = ConverterCommon.encodeInterruptAssertWaitTime(duration)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.INTERRUPT_LOW_LEVEL_TIMER, buffer)
 	}
 
@@ -167,7 +167,7 @@ export class Wiz5500 {
 	 */
 	async readInterrupt() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.INTERRUPT, 1)
-		return Converter.decodeInterrupt(buffer)
+		return ConverterCommon.decodeInterrupt(buffer)
 	}
 
 	/**
@@ -175,7 +175,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeInterrupt(interrupt) {
-		const buffer = Converter.encodeInterrupt(interrupt)
+		const buffer = ConverterCommon.encodeInterrupt(interrupt)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.INTERRUPT, buffer)
 	}
 
@@ -184,7 +184,7 @@ export class Wiz5500 {
 	 */
 	async readInterruptMask() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.INTERRUPT_MASK, 1)
-		return Converter.decodeInterruptMask(buffer)
+		return ConverterCommon.decodeInterruptMask(buffer)
 	}
 
 	/**
@@ -192,7 +192,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeInterruptMask(mask) {
-		const buffer = Converter.encodeInterruptMask(mask)
+		const buffer = ConverterCommon.encodeInterruptMask(mask)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.INTERRUPT_MASK, buffer)
 	}
 
@@ -201,7 +201,7 @@ export class Wiz5500 {
 	 */
 	async readSocketInterrupt() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.SOCKET_INTERRUPT, 1)
-		return Converter.decodeSocketInterrupt(buffer)
+		return ConverterCommon.decodeSocketInterrupt(buffer)
 	}
 
 	// /**
@@ -209,7 +209,7 @@ export class Wiz5500 {
 	//  * @returns {Promise<void>}
 	//  */
 	// async writeSocketInterrupt(socketInterrupt) {
-	// 	const buffer = Converter.encodeSocketInterrupt(socketInterrupt)
+	// 	const buffer = ConverterCommon.encodeSocketInterrupt(socketInterrupt)
 	// 	return Common.writeCommon(this.#bus, COMMON_REGISTERS.SOCKET_INTERRUPT, buffer)
 	// }
 
@@ -218,7 +218,7 @@ export class Wiz5500 {
 	 */
 	async readSocketInterruptMask() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.SOCKET_INTERRUPT_MASK, 1)
-		return Converter.decodeSocketInterruptMask(buffer)
+		return ConverterCommon.decodeSocketInterruptMask(buffer)
 	}
 
 	/**
@@ -226,7 +226,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketInterruptMask(socketInterruptMask) {
-		const buffer = Converter.encodeSocketInterruptMask(socketInterruptMask)
+		const buffer = ConverterCommon.encodeSocketInterruptMask(socketInterruptMask)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.SOCKET_INTERRUPT_MASK, buffer)
 	}
 
@@ -235,7 +235,7 @@ export class Wiz5500 {
 	 */
 	async readRetryTime() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.RETRY_TIME, 2)
-		return Converter.decodeRetryTime(buffer)
+		return ConverterCommon.decodeRetryTime(buffer)
 	}
 
 	/**
@@ -243,7 +243,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeRetryTime(retryTime) {
-		const buffer = Converter.encodeRetryTime(retryTime)
+		const buffer = ConverterCommon.encodeRetryTime(retryTime)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.RETRY_TIME, buffer)
 	}
 
@@ -252,7 +252,7 @@ export class Wiz5500 {
 	 */
 	async readRetryCount() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.RETRY_COUNT, 1)
-		return Converter.decodeRetryCount(buffer)
+		return ConverterCommon.decodeRetryCount(buffer)
 	}
 
 	/**
@@ -260,24 +260,24 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writeRetryCount(count) {
-		const buffer = Converter.encodeRetryCount(count)
+		const buffer = ConverterCommon.encodeRetryCount(count)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.RETRY_COUNT, buffer)
 	}
 
 	/**
-	 * @returns {Promise<number>}
+	 * @returns {Promise<Temporal.Duration>}
 	 */
 	async readPPPLinkControlProtocolRequestTimer() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.PPP_LCP_REQUEST_TIMER, 1)
-		return Converter.decodePPPLinkControlProtocolRequestTimer(buffer)
+		return ConverterCommon.decodePPPLinkControlProtocolRequestTimer(buffer)
 	}
 
 	/**
-	 * @param {number} time
+	 * @param {Temporal.Duration} duration
 	 * @returns {Promise<void>}
 	 */
-	async writePPPLinkControlProtocolRequestTimer(time) {
-		const buffer = Converter.encodePPPLinkControlProtocolRequestTimer(time)
+	async writePPPLinkControlProtocolRequestTimer(duration) {
+		const buffer = ConverterCommon.encodePPPLinkControlProtocolRequestTimer(duration)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.PPP_LCP_REQUEST_TIMER, buffer)
 	}
 
@@ -286,7 +286,7 @@ export class Wiz5500 {
 	 */
 	async readPPPLinkControlProtocolMagicNumber() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.PPP_LCP_MAGIC_NUMBER, 1)
-		return Converter.decodePPPLinkControlProtocolMagicNumber(buffer)
+		return ConverterCommon.decodePPPLinkControlProtocolMagicNumber(buffer)
 	}
 
 	/**
@@ -294,7 +294,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writePPPLinkControlProtocolMagicNumber(magic) {
-		const buffer = Converter.encodePPPLinkControlProtocolMagicNumber(magic)
+		const buffer = ConverterCommon.encodePPPLinkControlProtocolMagicNumber(magic)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.PPP_LCP_MAGIC_NUMBER, buffer)
 	}
 
@@ -320,7 +320,7 @@ export class Wiz5500 {
 	 */
 	async readPPPSessionIdentification() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.PPP_SESSION_IDENTIFICATION, 2)
-		return Converter.decodePPPSessionIdentification(buffer)
+		return ConverterCommon.decodePPPSessionIdentification(buffer)
 	}
 
 	/**
@@ -328,7 +328,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writePPPSessionIdentification(id) {
-		const buffer = Converter.encodePPPSessionIdentification(id)
+		const buffer = ConverterCommon.encodePPPSessionIdentification(id)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.PPP_SESSION_IDENTIFICATION, buffer)
 	}
 
@@ -337,7 +337,7 @@ export class Wiz5500 {
 	 */
 	async readPPPMaximumSegmentSize() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.PPP_MAXIMUM_SEGMENT_SIZE, 2)
-		return Converter.decodePPPMaximumSegmentSize(buffer)
+		return ConverterCommon.decodePPPMaximumSegmentSize(buffer)
 	}
 
 	/**
@@ -345,7 +345,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writePPPMaximumSegmentSize(size) {
-		const buffer = Converter.encodePPPMaximumSegmentSize(size)
+		const buffer = ConverterCommon.encodePPPMaximumSegmentSize(size)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.PPP_MAXIMUM_SEGMENT_SIZE, buffer)
 	}
 
@@ -370,7 +370,7 @@ export class Wiz5500 {
 	 */
 	async readPHYConfig() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.PHY_CONFIG, 1)
-		return Converter.decodePHYConfig(buffer)
+		return ConverterCommon.decodePHYConfig(buffer)
 	}
 
 	/**
@@ -378,7 +378,7 @@ export class Wiz5500 {
 	 * @returns {Promise<void>}
 	 */
 	async writePHYConfig(config) {
-		const buffer = Converter.encodePHYConfig(config)
+		const buffer = ConverterCommon.encodePHYConfig(config)
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.PHY_CONFIG, buffer)
 	}
 
@@ -387,7 +387,7 @@ export class Wiz5500 {
 	 */
 	async readChipVersion() {
 		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.CHIP_VERSION, 1)
-		return Converter.decodeChipVersion(buffer)
+		return ConverterCommon.decodeChipVersion(buffer)
 	}
 
 
