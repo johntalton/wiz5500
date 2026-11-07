@@ -29,6 +29,7 @@ import {
 	SocketStatus,
 	BufferSize,
 
+	SocketNumber,
 	SocketSocketInterrupt,
 	SocketSocketInterruptMask
 } from './types.js' */
@@ -396,7 +397,7 @@ export class Wiz5500 {
 	//
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<SocketMode>}
 	 */
 	async readSocketMode(socketNumber) {
@@ -405,7 +406,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {SocketMode} mode
 	 * @returns {Promise<void>}
 	 */
@@ -415,7 +416,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<SocketCommand>}
 	 */
 	async readSocketCommand(socketNumber) {
@@ -424,7 +425,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {SocketCommand} command
 	 * @returns {Promise<void>}
 	 */
@@ -434,7 +435,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<SocketSocketInterrupt>}
 	 */
 	async readSocketSocketInterrupt(socketNumber) {
@@ -443,7 +444,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {Partial<SocketSocketInterrupt>} interrupt
 	 * @returns {Promise<void>}
 	 */
@@ -453,7 +454,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<SocketStatus>}
 	 */
 	async readSocketStatus(socketNumber) {
@@ -462,7 +463,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<number>}
 	 */
 	async readSocketSourcePort(socketNumber) {
@@ -471,7 +472,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} port
 	 * @returns {Promise<void>}
 	 */
@@ -481,7 +482,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<HardwareAddressOutput>}
 	 */
 	async readSocketDestinationHardwareAddress(socketNumber) {
@@ -490,7 +491,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {HardwareAddressInput} hardwareAddress
 	 * @returns {Promise<void>}
 	 */
@@ -500,7 +501,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<Address>}
 	 */
 	async readSocketDestinationIPAddress(socketNumber) {
@@ -509,7 +510,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {AddressInput} address
 	 * @returns {Promise<void>}
 	 */
@@ -519,7 +520,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<number>}
 	 */
 	async readSocketDestinationPort(socketNumber) {
@@ -528,7 +529,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} port
 	 * @returns {Promise<void>}
 	 */
@@ -538,7 +539,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<number>}
 	 */
 	async readSocketMaximumSegmentSize(socketNumber) {
@@ -547,7 +548,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} size
 	 * @returns {Promise<void>}
 	 */
@@ -558,7 +559,7 @@ export class Wiz5500 {
 
 	/**
 	 * @see {@link https://www.iana.org/assignments/ip-parameters}
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<number>}
 	 */
 	async readSocketIPTypeOfService(socketNumber) {
@@ -568,7 +569,7 @@ export class Wiz5500 {
 
 	/**
 	 * @see {@link https://www.iana.org/assignments/ip-parameters}
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} typeOfService
 	 * @returns {Promise<void>}
 	 */
@@ -579,7 +580,7 @@ export class Wiz5500 {
 
 	/**
 	 * @see {@link https://www.iana.org/assignments/ip-parameters}
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<number>}
 	 */
 	async readSocketIPTimeToLive(socketNumber) {
@@ -589,7 +590,7 @@ export class Wiz5500 {
 
 	/**
 	 * @see {@link https://www.iana.org/assignments/ip-parameters}
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} timeToLive
 	 * @returns {Promise<void>}
 	 */
@@ -599,7 +600,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<BufferSize>}
 	 */
 	async readSocketReceiveBufferSize(socketNumber) {
@@ -608,7 +609,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {BufferSize} size
 	 * @returns {Promise<void>}
 	 */
@@ -618,7 +619,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<BufferSize>}
 	 */
 	async readSocketTransmitBufferSize(socketNumber) {
@@ -627,7 +628,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {BufferSize} size
 	 * @returns {Promise<void>}
 	 */
@@ -637,7 +638,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<number>}
 	 */
 	async readSocketTXFreeSize(socketNumber) {
@@ -646,7 +647,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<number>}
 	 */
 	async readSocketTXReadPointer(socketNumber) {
@@ -655,7 +656,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<number>}
 	 */
 	async readSocketTXWritePointer(socketNumber) {
@@ -664,7 +665,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} pointer
 	 * @returns {Promise<void>}
 	 */
@@ -674,7 +675,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<number>}
 	 */
 	async readSocketRXReceiveSize(socketNumber) {
@@ -683,7 +684,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<number>}
 	 */
 	async readSocketRXReadPointer(socketNumber) {
@@ -692,7 +693,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} pointer
 	 * @returns {Promise<void>}
 	 */
@@ -702,7 +703,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<number>}
 	 */
 	async readSocketRXWritePointer(socketNumber) {
@@ -711,7 +712,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<SocketSocketInterruptMask>}
 	 */
 	async readSocketSocketInterruptMask(socketNumber) {
@@ -720,7 +721,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {SocketSocketInterruptMask} mask
 	 * @returns {Promise<void>}
 	 */
@@ -730,7 +731,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @returns {Promise<number>}
 	 */
 	async readSocketFragmentOffsetInIPHeader(socketNumber) {
@@ -739,7 +740,7 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} offset
 	 * @returns {Promise<void>}
 	 */
@@ -749,8 +750,8 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
-	 * @returns {Promise<number>}
+	 * @param {SocketNumber} socketNumber
+	 * @returns {Promise<Temporal.Duration>}
 	 */
 	async readSocketKeepAliveTimer(socketNumber) {
 		const buffer = await Common.readSocket(this.#bus, socketNumber, SOCKET_REGISTER.SOCKET_KEEP_ALIVE_TIMER, 1)
@@ -758,8 +759,8 @@ export class Wiz5500 {
 	}
 
 	/**
-	 * @param {number} socketNumber
-	 * @param {number} time
+	 * @param {SocketNumber} socketNumber
+	 * @param {Temporal.Duration} time
 	 * @returns {Promise<void>}
 	 */
 	async writeSocketKeepAliveTimer(socketNumber, time) {
@@ -772,7 +773,7 @@ export class Wiz5500 {
 	//
 
 	/**
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} address
 	 * @param {number} length
 	 * @returns {Promise<CommonBufferSource>}

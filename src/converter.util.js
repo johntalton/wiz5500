@@ -27,7 +27,7 @@ export function parseDotQuad(address) {
 
 /**
  * @param {string} address
- * @returns {[ number, number, number, number, number, number ]|undefined}
+ * @returns {Array<number>|undefined}
  */
 export function parseHardwareAddress(address) {
 	if(address === undefined) { return undefined }

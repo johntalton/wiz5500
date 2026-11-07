@@ -1,4 +1,6 @@
-/** @import { SOCKET_COMMANDS, SOCKET_STATUS, PHY_OPERATIONAL_MODE } from './defs.js' */
+/** @import { BLOCKS, SOCKET_COMMANDS, SOCKET_STATUS, PHY_OPERATIONAL_MODE } from './defs.js' */
+
+/** @typedef {typeof BLOCKS[keyof typeof BLOCKS]} Block */
 
 /**
  * @typedef {Object} Mode
@@ -34,9 +36,7 @@
  * @typedef {[ boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean ]} SocketInterruptMask
  */
 
-/**
- * @typedef {typeof PHY_OPERATIONAL_MODE[keyof typeof PHY_OPERATIONAL_MODE]} PHYOperationMode
- */
+/** @typedef {typeof PHY_OPERATIONAL_MODE[keyof typeof PHY_OPERATIONAL_MODE]} PHYOperationMode */
 
 /**
  * @typedef {Object} PHYConfig
@@ -67,14 +67,9 @@
  * @property {string} dotQuad
  */
 
-/**
- * @typedef {AddressParts & AddressDotQuad} Address
- */
+/** @typedef {AddressParts & AddressDotQuad} Address */
 
-/**
- * @typedef {AddressParts | AddressDotQuad | [ number, number, number, number ] | string} AddressInput
- *
- */
+/** @typedef {AddressParts | AddressDotQuad | [ number, number, number, number ] | string} AddressInput */
 
 /**
  * @typedef {Object} HardwareAddress
@@ -94,6 +89,8 @@
 //
 //
 //
+
+/** @typedef {0|1|2|3|4|5|6|7} SocketNumber */
 
 /**
  * @typedef {Object} SocketModeClosed
@@ -127,9 +124,7 @@
 
 /** @typedef {SocketModeClosed|SocketModeTCP|SocketModeUDP|SocketModeMACRaw } SocketMode */
 
-/**
- * @typedef {typeof SOCKET_COMMANDS[keyof typeof SOCKET_COMMANDS]} SocketCommand
- */
+/** @typedef {typeof SOCKET_COMMANDS[keyof typeof SOCKET_COMMANDS]} SocketCommand */
 
 /**
  * @typedef {Object} SocketSocketInterrupt
@@ -149,9 +144,7 @@
  * @property {boolean} enableConnect
  */
 
-/**
- * @typedef {typeof SOCKET_STATUS[keyof typeof SOCKET_STATUS]} SocketStatus
- */
+/** @typedef {typeof SOCKET_STATUS[keyof typeof SOCKET_STATUS]} SocketStatus */
 
 /** @typedef {0|1|2|4|8|16} BufferSize */
 

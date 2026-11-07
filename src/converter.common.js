@@ -208,19 +208,6 @@ export class ConverterCommon {
 			[ [ 0,1 ], [ 1,1 ], [ 2,1 ], [ 3,1 ], [ 4,1 ], [ 5,1 ], [ 6,1 ], [ 7,1 ] ],
 			interrupt)
 				.map(value => value === 1)
-
-		// const s0 = BitSmush.extractBits(interrupt, 0, 1) === 1
-		// const s1 = BitSmush.extractBits(interrupt, 1, 1) === 1
-		// const s2 = BitSmush.extractBits(interrupt, 2, 1) === 1
-		// const s3 = BitSmush.extractBits(interrupt, 3, 1) === 1
-		// const s4 = BitSmush.extractBits(interrupt, 4, 1) === 1
-		// const s5 = BitSmush.extractBits(interrupt, 5, 1) === 1
-		// const s6 = BitSmush.extractBits(interrupt, 6, 1) === 1
-		// const s7 = BitSmush.extractBits(interrupt, 7, 1) === 1
-
-		// return [
-		// 	s0, s1, s2, s3, s4, s5, s6, s7
-		// ]
 	}
 
 	// /**

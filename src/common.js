@@ -2,6 +2,7 @@ import { BitSmush } from "@johntalton/bitsmush"
 import { BLOCKS, SOCKET_BLOCK_SIZE } from "./defs.js"
 
 /** @import { SPIBus, SPIBufferSource } from '@johntalton/and-other-delights'  */
+/** @import { SocketNumber, Block } from './types.js' */
 
 /** @typedef {ArrayBuffer | ArrayBufferView<ArrayBuffer>} CommonBufferSource */
 
@@ -14,9 +15,17 @@ export const FRAME_BYTE_MODE_4_BYTES = 0b11
 
 /** @typedef {FRAME_BYTE_MODE_VARIABLE | FRAME_BYTE_MODE_1_BYTE | FRAME_BYTE_MODE_2_BYTES | FRAME_BYTE_MODE_4_BYTES} FrameByteMode */
 
+/**
+ * @param {number} block
+ * @returns {block is Block}
+ */
+export function isBlock(block) {
+	return (block >= 0) && (block <= 0x1F)
+}
+
 export class Common {
 	/**
-	 * @param {number} block
+	 * @param {Block} block
 	 * @param {number} address
 	 * @param {boolean} write
 	 * @param {FrameByteMode} byteMode
@@ -40,7 +49,7 @@ export class Common {
 		if(data !== undefined && dataByteSize > 0) {
 			const data8 = ArrayBuffer.isView(data) ?
 				new Uint8Array(data.buffer, data.byteOffset, data.byteLength) :
-				new Uint8Array(data, 0, data.byteLength)
+				new Uint8Array(data)
 
 			buffer.set(data8, SPI_FRAME_HEADER_SIZE)
 		}
@@ -50,7 +59,7 @@ export class Common {
 
 	/**
 	 * @param {SPIBus} bus
-	 * @param {number} block
+	 * @param {Block} block
 	 * @param {number} address
 	 * @param {number} length
 	 * @returns {Promise<CommonBufferSource>}
@@ -72,7 +81,7 @@ export class Common {
 
 	/**
 	 * @param {SPIBus} bus
-	 * @param {number} block
+	 * @param {Block} block
 	 * @param {number} address
 	 * @param {SPIBufferSource} buffer
 	 * @returns {Promise<void>}
@@ -100,37 +109,40 @@ export class Common {
 
 	/**
 	 * @param {SPIBus} bus
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} address
 	 * @param {SPIBufferSource} buffer
 	 * @returns {Promise<void>}
 	 */
 	static async writeSocket(bus, socketNumber, address, buffer) {
 		const block = BLOCKS.SOCKET_0 + (socketNumber * SOCKET_BLOCK_SIZE)
+		if(!isBlock(block)) { throw new RangeError('invalid block') }
 		return Common.writeRegister(bus, block, address, buffer)
 	}
 
 	/**
 	 * @param {SPIBus} bus
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} address
 	 * @param {SPIBufferSource} buffer
 	 * @returns {Promise<void>}
 	 */
 	static async writeSocketTX(bus, socketNumber, address, buffer) {
 		const block = BLOCKS.SOCKET_0_TX + (socketNumber * SOCKET_BLOCK_SIZE)
+		if(!isBlock(block)) { throw new RangeError('invalid block') }
 		return Common.writeRegister(bus, block, address, buffer)
 	}
 
 	/**
 	 * @param {SPIBus} bus
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} address
 	 * @param {SPIBufferSource} buffer
 	 * @returns {Promise<void>}
 	 */
 	static async writeSocketRX(bus, socketNumber, address, buffer) {
 		const block = BLOCKS.SOCKET_0_RX + (socketNumber * SOCKET_BLOCK_SIZE)
+		if(!isBlock(block)) { throw new RangeError('invalid block') }
 		return Common.writeRegister(bus, block, address, buffer)
 	}
 
@@ -146,37 +158,42 @@ export class Common {
 
 	/**
 	 * @param {SPIBus} bus
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} address
 	 * @param {number} length
 	 * @returns {Promise<CommonBufferSource>}
 	 */
 	static async readSocket(bus, socketNumber, address, length) {
 		const block = BLOCKS.SOCKET_0 + (socketNumber * SOCKET_BLOCK_SIZE)
+		if(!isBlock(block)) { throw new RangeError('invalid block') }
 		return Common.#readRegister(bus, block, address, length)
 	}
 
 	/**
 	 * @param {SPIBus} bus
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} address
 	 * @param {number} length
 	 * @returns {Promise<CommonBufferSource>}
 	 */
 	static async readSocketTX(bus, socketNumber, address, length) {
 		const block = BLOCKS.SOCKET_0_TX + (socketNumber * SOCKET_BLOCK_SIZE)
+		if(!isBlock(block)) { throw new RangeError('invalid block') }
 		return Common.#readRegister(bus, block, address, length)
 	}
 
 	/**
 	 * @param {SPIBus} bus
-	 * @param {number} socketNumber
+	 * @param {SocketNumber} socketNumber
 	 * @param {number} address
 	 * @param {number} length
 	 * @returns {Promise<CommonBufferSource>}
 	 */
 	static async readSocketRX(bus, socketNumber, address, length) {
 		const block = BLOCKS.SOCKET_0_RX + (socketNumber * SOCKET_BLOCK_SIZE)
-		return Common.#readRegister(bus, block, address, length)
+		if(!isBlock(block)) { throw new RangeError('invalid block') }
+
+		const len = Math.min(length, 1024)
+		return Common.#readRegister(bus, block, address, len)
 	}
 }

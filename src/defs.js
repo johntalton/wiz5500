@@ -2,7 +2,7 @@
 
 export const CHIP_VERSION_W5500 = 0x04
 
-export const BLOCKS = {
+export const BLOCKS = /** @type {const} */ ({
 	COMMON: 0x00,
 
 	//
@@ -37,9 +37,9 @@ export const BLOCKS = {
 	SOCKET_7: 0x1D,
 	SOCKET_7_TX: 0x1E,
 	SOCKET_7_RX: 0x1F,
-}
+})
 
-export const COMMON_REGISTERS = {
+export const COMMON_REGISTERS = /** @type {const} */ ({
 	MODE: 0x00_00,
 
 	GATEWAY_ADDRESS: 0x00_01,
@@ -68,9 +68,9 @@ export const COMMON_REGISTERS = {
 	PHY_CONFIG: 0x00_2E,
 
 	CHIP_VERSION: 0x00_39,
-}
+})
 
-export const SOCKET_REGISTER = {
+export const SOCKET_REGISTER = /** @type {const} */ ({
 	SOCKET_MODE: 0x00_00,
 	SOCKET_COMMAND: 0x00_01,
 	SOCKET_INTERRUPT: 0x00_02,
@@ -100,7 +100,7 @@ export const SOCKET_REGISTER = {
 	SOCKET_INTERRUPT_MASK: 0x00_2C,
 	SOCKET_FRAGMENT_OFFSET_IN_IP_HEADER: 0x00_2D,
 	SOCKET_KEEP_ALIVE_TIMER: 0x00_2F
-}
+})
 
 //
 export const SOCKET_BLOCK_SIZE = 4

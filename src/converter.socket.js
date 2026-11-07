@@ -6,6 +6,8 @@ import { BUFFER_SIZES, SOCKET_PROTOCOL } from './defs.js'
 /** @import { SPIBufferSource } from '@johntalton/and-other-delights' */
 /** @import { SocketCommand, SocketSocketInterrupt, SocketSocketInterruptMask, SocketStatus, BufferSize, SocketMode, SocketModeClosed, SocketModeTCP, SocketModeUDP, SocketModeMACRaw } from './types.js' */
 
+export const KEEP_ALIVE_UNIT_S = 5
+
 /**
  * @param {number} size
  * @returns {size is BufferSize}
@@ -444,19 +446,22 @@ export class ConverterSocket {
 
 	/**
 	 * @param {SPIBufferSource} buffer
-	 * @returns {number}
+	 * @returns {Temporal.Duration}
 	 */
 	static decodeKeepAliveTimer(buffer) {
-		// todo units 5s
-		return ConverterUtil.decodeU8(buffer)
+		const time = ConverterUtil.decodeU8(buffer)
+		const seconds = time * KEEP_ALIVE_UNIT_S
+		return Temporal.Duration.from({ seconds })
 	}
 
 	/**
-	 * @param {number} time
+	 * @param {Temporal.Duration} duration
 	 * @returns {SPIBufferSource}
 	 */
-	static encodeKeepAliveTimer(time) {
-		// todo units 5s
+	static encodeKeepAliveTimer(duration) {
+		if(duration.sign === -1) { throw new RangeError('duration must be positive') }
+		const time = Math.round(duration.total('seconds') / KEEP_ALIVE_UNIT_S)
+		if(time > 0xFF) { throw new RangeError('duration exceeds max') }
 		return ConverterUtil.encodeU8(time)
 	}
 }
