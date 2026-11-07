@@ -172,28 +172,146 @@ describe('Converter.Util', () => {
 
 
 	describe('decodeAddress', () => {
-		it('should ', () => {
-
+		it('should handle value', () => {
+			const buffer = Uint8Array.from([ 192, 168, 0, 1 ])
+			const result = ConverterUtil.decodeAddress(buffer)
+			Assert.deepEqual(result, {
+				a: 192, b: 168, c: 0, d: 1,
+				dotQuad: '192.168.0.1'
+			})
 		})
 
+		it('should handle invalid buffer length', () => {
+			const buffer = Uint8Array.from([ 0x00 ])
+			Assert.throws(() => ConverterUtil.decodeAddress(buffer), {
+				message: 'undefined address part (b)',
+				name: 'Error'
+			})
+		})
 	})
 
 	describe('encodeAddress', () => {
-		it('should ', () => {
-
+		it('should handle from string', () => {
+			const buffer = ConverterUtil.encodeAddress('192.168.0.1')
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 192, 168, 0, 1 ]))
 		})
 
+		it('should handle from Array', () => {
+			const buffer = ConverterUtil.encodeAddress([ 192, 168, 0, 1 ])
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 192, 168, 0, 1 ]))
+		})
+
+		it('should handle from object abcd', () => {
+			const buffer = ConverterUtil.encodeAddress({ a: 192, b: 168, c: 0, d: 1 })
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 192, 168, 0, 1 ]))
+		})
+
+		it('should handle from object dotQuad', () => {
+			const buffer = ConverterUtil.encodeAddress({ dotQuad: '192.168.0.1' })
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 192, 168, 0, 1 ]))
+		})
+
+		it('should handle parts over dotQuad', () => {
+			const buffer = ConverterUtil.encodeAddress({
+				a: 192, b: 168, c: 0, d: 1,
+				dotQuad: '10.0.0.20'
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 192, 168, 0, 1 ]))
+		})
+
+		it('should handle invalid param', () => {
+			Assert.throws(() => ConverterUtil.encodeAddress(42), {
+				message: 'failed to parse address',
+				name: 'Error'
+			})
+		})
+
+		it('should handle invalid parts value', () => {
+			Assert.throws(() => ConverterUtil.encodeAddress([ 192, 168, 0, 300 ]), {
+				message: 'out of bounds',
+				name: 'RangeError'
+			})
+		})
+
+		it('should handle invalid parts length', () => {
+			Assert.throws(() => ConverterUtil.encodeAddress([ 192, 168, 0 ]), {
+				message: 'invalid parts length',
+				name: 'Error'
+			})
+		})
 	})
 
 	describe('decodeHardwareAddress', () => {
-		it('should ', () => {
-
+		it('should handle value', () => {
+			const buffer = Uint8Array.from([ 1,2,3,4,5,6 ])
+			const result = ConverterUtil.decodeHardwareAddress(buffer)
+			Assert.deepEqual(result, {
+				a: 1, b: 2, c: 3, d: 4, e: 5, f:6,
+				canonical: '01:02:03:04:05:06'
+			})
 		})
 
 	})
 
 	describe('encodeHardwareAddress', () => {
-		it('should ', () => {
+		it('should handle string', () => {
+			const buffer = ConverterUtil.encodeHardwareAddress('A:B:C:D:E:F')
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0xA, 0xB, 0xC, 0xD, 0xE, 0xF ]))
+		})
+
+		it('should handle array', () => {
+			const buffer = ConverterUtil.encodeHardwareAddress([ 0xA, 0xB, 0xC, 0xD, 0xE, 0xF ])
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0xA, 0xB, 0xC, 0xD, 0xE, 0xF ]))
+		})
+
+		it('should handle invalid array length', () => {
+			Assert.throws(() => ConverterUtil.encodeHardwareAddress([ 0xA, 0xB, 0xC ]), {
+				message: 'invalid parts length',
+				name: 'Error'
+			})
+		})
+
+		it('should handle invalid array values', () => {
+			Assert.throws(() => ConverterUtil.encodeHardwareAddress([ 0xA, 0xB, 0xC, 0xD, 0xE, 0xFF_FF ]), {
+				message: 'out of bounds',
+				name: 'RangeError'
+			})
+		})
+
+		it('should handle object abcdef', () => {
+			const buffer = ConverterUtil.encodeHardwareAddress({ a: 0xA, b: 0xB, c: 0xC, d: 0xD, e: 0xE, f: 0xF })
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0xA, 0xB, 0xC, 0xD, 0xE, 0xF ]))
+		})
+
+		it('should handle unknown param', () => {
+			Assert.throws(() => ConverterUtil.encodeHardwareAddress(42), {
+				message: 'failed to parse address',
+				name: 'Error'
+			})
 
 		})
 

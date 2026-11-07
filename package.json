@@ -8,6 +8,7 @@
   ],
   "exports": {
     ".": "./src/index.js",
+    "./common": "./src/common.js",
     "./converter": "./src/converter.js"
   },
   "files": [

@@ -76,6 +76,7 @@ export class Common {
 		// console.log('readRegister result', result)
 		if(result.bytesWritten  !== SPI_FRAME_HEADER_SIZE) { throw new Error('write failure') }
 		if(result.readBuffer === undefined) { throw new Error('read failure') }
+		if(result.readBuffer.byteLength < length) { throw new RangeError('invalid read length') }
 		return result.readBuffer
 	}
 

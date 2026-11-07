@@ -128,16 +128,16 @@ export class ConverterUtil {
 	static encodeAddress(address) {
 		const parts = (typeof address === 'string') ? parseDotQuad(address) :
 			Array.isArray(address) ? address :
-			('a' in address) ? [ address.a, address.b, address.c, address.d] :
-			('dotQuad' in address) ? parseDotQuad(address.dotQuad) :
+			(address instanceof Object && 'a' in address) ? [ address.a, address.b, address.c, address.d] :
+			(address instanceof Object && 'dotQuad' in address) ? parseDotQuad(address.dotQuad) :
 			undefined
 
 		if(parts === undefined) { throw new Error('failed to parse address') }
-		if(!Array.isArray(parts)) { throw new Error('invalid parts') }
+		if(!Array.isArray(parts)) { throw new Error('invalid parts array') }
 		if(parts.length !== ADDRESS_SIZE) { throw new Error('invalid parts length') }
 
 		const ok = parts.every(part => part <= 255 && part >= 0)
-		if(!ok) { throw new Error('invalid parts') }
+		if(!ok) { throw new RangeError('out of bounds') }
 
 		// console.log('encode address parts', parts)
 
@@ -177,7 +177,7 @@ export class ConverterUtil {
 	static encodeHardwareAddress(hardwareAddress) {
 		const parts = (typeof hardwareAddress === 'string') ? parseHardwareAddress(hardwareAddress) :
 			(Array.isArray(hardwareAddress)) ? hardwareAddress :
-			('a' in hardwareAddress) ? [
+			(hardwareAddress instanceof Object && 'a' in hardwareAddress) ? [
 				hardwareAddress.a,
 				hardwareAddress.b,
 				hardwareAddress.c,
@@ -188,11 +188,11 @@ export class ConverterUtil {
 			undefined
 
 		if(parts === undefined) { throw new Error('failed to parse address') }
-		if(!Array.isArray(parts)) { throw new Error('invalid parts') }
+		if(!Array.isArray(parts)) { throw new Error('invalid parts array') }
 		if(parts.length !== HARDWARE_ADDRESS_SIZE) { throw new Error('invalid parts length') }
 
 		const ok = parts.every(part => part <= 255 && part >= 0)
-		if(!ok) { throw new Error('invalid parts') }
+		if(!ok) { throw new RangeError('out of bounds') }
 
 		return Uint8Array.from(parts)
 	}
