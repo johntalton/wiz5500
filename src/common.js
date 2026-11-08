@@ -194,7 +194,6 @@ export class Common {
 		const block = BLOCKS.SOCKET_0_RX + (socketNumber * SOCKET_BLOCK_SIZE)
 		if(!isBlock(block)) { throw new RangeError('invalid block') }
 
-		const len = Math.min(length, 1024)
-		return Common.#readRegister(bus, block, address, len)
+		return Common.#readRegister(bus, block, address, length)
 	}
 }

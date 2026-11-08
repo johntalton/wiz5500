@@ -129,22 +129,22 @@ export class Wiz5500 {
 		return Common.writeCommon(this.#bus, COMMON_REGISTERS.SOURCE_IP_ADDRESS, buffer)
 	}
 
-	/**
-	 * @returns {Promise<number>}
-	 */
-	async _readInterruptLowLevelTimer() {
-		const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.INTERRUPT_LOW_LEVEL_TIMER, 2)
-		return ConverterCommon._decodeInterruptLowLevelTimer(buffer)
-	}
+	// /**
+	//  * @returns {Promise<number>}
+	//  */
+	// async _readInterruptLowLevelTimer() {
+	// 	const buffer = await Common.readCommon(this.#bus, COMMON_REGISTERS.INTERRUPT_LOW_LEVEL_TIMER, 2)
+	// 	return ConverterCommon._decodeInterruptLowLevelTimer(buffer)
+	// }
 
-	/**
-	 * @param {number} level
-	 * @returns {Promise<void>}
-	 */
-	async _writeInterruptLowLevelTimer(level) {
-		const buffer = ConverterCommon._encodeInterruptLowLevelTimer(level)
-		return Common.writeCommon(this.#bus, COMMON_REGISTERS.INTERRUPT_LOW_LEVEL_TIMER, buffer)
-	}
+	// /**
+	//  * @param {number} level
+	//  * @returns {Promise<void>}
+	//  */
+	// async _writeInterruptLowLevelTimer(level) {
+	// 	const buffer = ConverterCommon._encodeInterruptLowLevelTimer(level)
+	// 	return Common.writeCommon(this.#bus, COMMON_REGISTERS.INTERRUPT_LOW_LEVEL_TIMER, buffer)
+	// }
 
 	/**
 	 * @returns {Promise<Temporal.Duration>}
@@ -393,7 +393,7 @@ export class Wiz5500 {
 
 
 	//
-	// -----------------------
+	//
 	//
 
 	/**
