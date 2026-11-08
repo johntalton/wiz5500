@@ -110,7 +110,9 @@ export const ADDRESS_SIZE = 4
 export const HARDWARE_ADDRESS_SIZE = 6
 export const PORT_SIZE = 2
 
-export const BUFFER_SIZES = [ 0, 1, 2, 4, 8, 16 ]
+export const BUFFER_SIZES = /** @type {const} */ ([ 0, 1, 2, 4, 8, 16 ])
+
+export const SOCKET_NUMBERS = /** @type {const} */ ([ 0, 1, 2, 3, 4, 5, 6, 7 ])
 
 
 export const PHY_OPERATIONAL_MODE = /** @type {const} */ ({

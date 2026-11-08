@@ -1,6 +1,10 @@
 /** biome-ignore-all lint/style/noExcessiveLinesPerFile: full converter */
 import { BitSmush } from '@johntalton/bitsmush'
-import { ConverterUtil } from './converter.util.js'
+import {
+	ConverterUtil,
+	MAX_8_BIT_VALUE,
+	MAX_16_BIT_VALUE,
+} from './converter.util.js'
 
 /** @import {
 	Mode,
@@ -70,21 +74,21 @@ export class ConverterCommon {
 		return ConverterUtil.encodeU8(value)
 	}
 
-	/**
-	 * @param {SPIBufferSource} buffer
-	 * @returns {number}
-	 */
-	static _decodeInterruptLowLevelTimer(buffer) {
-		return ConverterUtil.decodeU16BE(buffer)
-	}
+	// /**
+	//  * @param {SPIBufferSource} buffer
+	//  * @returns {number}
+	//  */
+	// static _decodeInterruptLowLevelTimer(buffer) {
+	// 	return ConverterUtil.decodeU16BE(buffer)
+	// }
 
-	/**
-	 * @param {number} level
-	 * @returns {SPIBufferSource}
-	 */
-	static _encodeInterruptLowLevelTimer(level) {
-		return ConverterUtil.encodeU16BE(level)
-	}
+	// /**
+	//  * @param {number} level
+	//  * @returns {SPIBufferSource}
+	//  */
+	// static _encodeInterruptLowLevelTimer(level) {
+	// 	return ConverterUtil.encodeU16BE(level)
+	// }
 
 	/**
 	 * @param {SPIBufferSource} buffer
@@ -115,7 +119,7 @@ export class ConverterCommon {
 		const level = Math.round((nanoseconds * PLL_CLOCK_MHZ) / 4000 - 1)
 
 		if(level <= 0) { throw new RangeError('duration too small') }
-		if(level > 0xFF_FF) { throw new RangeError('duration too large') }
+		if(level > MAX_16_BIT_VALUE) { throw new RangeError('duration too large') }
 
 		return ConverterUtil.encodeU16BE(level)
 	}
@@ -246,21 +250,21 @@ export class ConverterCommon {
 		return ConverterUtil.encodeU8(value)
 	}
 
-	/**
-	 * @param {SPIBufferSource} buffer
-	 * @returns {number}
-	 */
-	static _decodeRetryTime(buffer) {
-		return ConverterUtil.decodeU16BE(buffer)
-	}
+	// /**
+	//  * @param {SPIBufferSource} buffer
+	//  * @returns {number}
+	//  */
+	// static _decodeRetryTime(buffer) {
+	// 	return ConverterUtil.decodeU16BE(buffer)
+	// }
 
-	/**
-	 * @param {number} retryTime
-	 * @returns {SPIBufferSource}
-	 */
-	static _encodeRetryTime(retryTime) {
-		return ConverterUtil.encodeU16BE(retryTime)
-	}
+	// /**
+	//  * @param {number} retryTime
+	//  * @returns {SPIBufferSource}
+	//  */
+	// static _encodeRetryTime(retryTime) {
+	// 	return ConverterUtil.encodeU16BE(retryTime)
+	// }
 
 	/**
 	 * @param {SPIBufferSource} buffer
@@ -318,7 +322,7 @@ export class ConverterCommon {
 	static encodePPPLinkControlProtocolRequestTimer(duration) {
 		if(duration.sign === -1) { throw new RangeError('duration must be positive') }
 		const timer = Math.round(duration.total('milliseconds') / PPP_LCP_REQUEST_TIMER_UNITS_MS)
-		if(timer > 0xFF) { throw new RangeError('duration exceeds max') }
+		if(timer > MAX_8_BIT_VALUE) { throw new RangeError('duration exceeds max') }
 		return ConverterUtil.encodeU8(timer)
 	}
 

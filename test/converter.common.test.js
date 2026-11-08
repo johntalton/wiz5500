@@ -100,8 +100,14 @@ describe('Converter.Common', () => {
 	})
 
 	describe('encodeInterrupt', () => {
-		it('should handle ', () => {
-
+		it('should handle value', () => {
+			const buffer = ConverterCommon.encodeInterrupt({
+				// empty
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_0000 ]))
 		})
 
 	})
@@ -121,8 +127,17 @@ describe('Converter.Common', () => {
 	})
 
 	describe('encodeInterruptMask', () => {
-		it('should handle ', () => {
-
+		it('should handle value', () => {
+			const buffer = ConverterCommon.encodeInterruptMask({
+				enableConflict: false,
+				enableUnreachable: false,
+				enableClosedPPPoE: false,
+				enableMagicWOL: false
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_0000 ]))
 		})
 
 	})
@@ -152,8 +167,15 @@ describe('Converter.Common', () => {
 	})
 
 	describe('encodeSocketInterruptMask', () => {
-		it('should handle ', () => {
-
+		it('should handle value', () => {
+			const buffer = ConverterCommon.encodeSocketInterruptMask([
+				false, false, false, false,
+				false, false, false, false
+			])
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_0000 ]))
 		})
 
 	})
@@ -176,8 +198,12 @@ describe('Converter.Common', () => {
 	})
 
 	describe('encodeRetryTime', () => {
-		it('should handle ', () => {
-
+		it('should handle value', () => {
+			const buffer = ConverterCommon.encodeRetryTime(Temporal.Duration.from({ seconds: 6, milliseconds: 553, microseconds: 500 }))
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0xFF, 0xFF ]))
 		})
 
 	})
@@ -192,22 +218,34 @@ describe('Converter.Common', () => {
 	})
 
 	describe('encodeRetryCount', () => {
-		it('should handle ', () => {
-
+		it('should handle value', () => {
+			const buffer = ConverterCommon.encodeRetryCount(42)
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 42 ]))
 		})
 
 	})
 
 	describe('decodePPPLinkControlProtocolRequestTimer', () => {
-		it('should handle ', () => {
-
+		it('should handle value', () => {
+			const buffer = Uint8Array.from([ 0xFF ])
+			const result = ConverterCommon.decodePPPLinkControlProtocolRequestTimer(buffer)
+			Assert.equal(result.toJSON(), 'PT6.375S')
 		})
 
 	})
 
 	describe('encodePPPLinkControlProtocolRequestTimer', () => {
-		it('should handle ', () => {
-
+		it('should handle value', () => {
+			const buffer = ConverterCommon.encodePPPLinkControlProtocolRequestTimer(
+				Temporal.Duration.from({ seconds: 6, milliseconds: 370 })
+			)
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0xFF ]))
 		})
 
 	})
@@ -222,14 +260,18 @@ describe('Converter.Common', () => {
 	})
 
 	describe('encodePPPLinkControlProtocolMagicNumber', () => {
-		it('should handle ', () => {
-
+		it('should handle value', () => {
+			const buffer = ConverterCommon.encodePPPLinkControlProtocolMagicNumber(77)
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 77 ]))
 		})
 
 	})
 
 	describe('decodePPPSessionIdentification', () => {
-		it('should handle ', () => {
+		it('should handle value', () => {
 			const buffer = Uint8Array.from([ 0xBE, 0xEF ])
 			const result = ConverterCommon.decodePPPSessionIdentification(buffer)
 			Assert.equal(result, 0xBEEF)
@@ -238,14 +280,18 @@ describe('Converter.Common', () => {
 	})
 
 	describe('encodePPPSessionIdentification', () => {
-		it('should handle ', () => {
-
+		it('should handle value', () => {
+			const buffer = ConverterCommon.encodePPPSessionIdentification(0xF00D)
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0xF0, 0x0D ]))
 		})
 
 	})
 
 	describe('decodePPPMaximumSegmentSize', () => {
-		it('should handle ', () => {
+		it('should handle value', () => {
 			const buffer = Uint8Array.from([ 0xBE, 0xEF ])
 			const result = ConverterCommon.decodePPPMaximumSegmentSize(buffer)
 			Assert.equal(result, 0xBEEF)
@@ -254,8 +300,12 @@ describe('Converter.Common', () => {
 	})
 
 	describe('encodePPPMaximumSegmentSize', () => {
-		it('should handle ', () => {
-
+		it('should handle value', () => {
+			const buffer = ConverterCommon.encodePPPMaximumSegmentSize(0xCAFE)
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0xCA, 0xFE ]))
 		})
 
 	})

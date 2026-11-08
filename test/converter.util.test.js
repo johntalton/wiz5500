@@ -181,6 +181,15 @@ describe('Converter.Util', () => {
 			})
 		})
 
+		it('should handle value (ArrayBuffer)', () => {
+			const buffer = Uint8Array.from([ 10, 0, 0, 20 ])
+			const result = ConverterUtil.decodeAddress(buffer.buffer)
+			Assert.deepEqual(result, {
+				a: 10, b: 0, c: 0, d: 20,
+				dotQuad: '10.0.0.20'
+			})
+		})
+
 		it('should handle invalid buffer length', () => {
 			const buffer = Uint8Array.from([ 0x00 ])
 			Assert.throws(() => ConverterUtil.decodeAddress(buffer), {
@@ -263,6 +272,15 @@ describe('Converter.Util', () => {
 			Assert.deepEqual(result, {
 				a: 1, b: 2, c: 3, d: 4, e: 5, f:6,
 				canonical: '01:02:03:04:05:06'
+			})
+		})
+
+		it('should handle value (ArrayBuffer)', () => {
+			const buffer = Uint8Array.from([ 8,6,7,5,3,0 ])
+			const result = ConverterUtil.decodeHardwareAddress(buffer.buffer)
+			Assert.deepEqual(result, {
+				a: 8, b: 6, c: 7, d: 5, e: 3, f: 0,
+				canonical: '08:06:07:05:03:00'
 			})
 		})
 

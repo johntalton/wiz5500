@@ -9,6 +9,9 @@ import { ADDRESS_SIZE, HARDWARE_ADDRESS_SIZE } from './defs.js'
 	HardwareAddressOutput
 } from './types.js' */
 
+export const MAX_16_BIT_VALUE = 0xFF_FF
+export const MAX_8_BIT_VALUE = 0xFF
+
 /**
  * @param {string} address
  */
@@ -63,7 +66,7 @@ export class ConverterUtil {
 	 */
 	static encodeU16BE(value) {
 		if(value < 0) { throw new RangeError('value must be positive') }
-		if(value > 0xFF_FF) { throw new RangeError('value exceeds 16-bit') }
+		if(value > MAX_16_BIT_VALUE) { throw new RangeError('value exceeds 16-bit') }
 		const dv = new DataView(new ArrayBuffer(2))
 		dv.setUint16(0, value, false)
 		return dv
@@ -91,7 +94,7 @@ export class ConverterUtil {
 	 */
 	static encodeU8(value) {
 		if(value < 0) { throw new RangeError('value must be positive') }
-		if(value > 0xFF) { throw new RangeError('value exceeds max') }
+		if(value > MAX_8_BIT_VALUE) { throw new RangeError('value exceeds max') }
 		return Uint8ClampedArray.from([ value ])
 	}
 

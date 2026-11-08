@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/style/noExcessiveLinesPerFile: does it all */
 import { BitSmush } from '@johntalton/bitsmush'
-import { ConverterUtil } from './converter.util.js'
+import { ConverterUtil, MAX_8_BIT_VALUE } from './converter.util.js'
 import { BUFFER_SIZES, SOCKET_PROTOCOL } from './defs.js'
 
 /** @import { SPIBufferSource } from '@johntalton/and-other-delights' */
@@ -13,7 +13,7 @@ export const KEEP_ALIVE_UNIT_S = 5
  * @returns {size is BufferSize}
  */
 export function isBufferSize(size) {
-	return BUFFER_SIZES.includes(size)
+	return /** @type {readonly number[]} */ (BUFFER_SIZES).includes(size)
 }
 
 /**
@@ -22,7 +22,7 @@ export function isBufferSize(size) {
  */
 export function isSocketStatus(status) {
 	// todo better check
-	return status >= 0 && status <= 0xFF
+	return status >= 0 && status <= MAX_8_BIT_VALUE
 }
 
 /**
@@ -31,7 +31,7 @@ export function isSocketStatus(status) {
  */
 export function isSocketCommand(command) {
 	// todo better check
-	return command >= 0 && command <= 0xFF
+	return command >= 0 && command <= MAX_8_BIT_VALUE
 }
 
 export class ConverterSocket {
@@ -160,7 +160,7 @@ export class ConverterSocket {
 			return ConverterSocket.#encodeModeMACRaw(mode)
 		}
 
-		throw new Error('unknown protocol')
+		throw new Error('unknown socket protocol')
 	}
 
 	/**
@@ -461,7 +461,7 @@ export class ConverterSocket {
 	static encodeKeepAliveTimer(duration) {
 		if(duration.sign === -1) { throw new RangeError('duration must be positive') }
 		const time = Math.round(duration.total('seconds') / KEEP_ALIVE_UNIT_S)
-		if(time > 0xFF) { throw new RangeError('duration exceeds max') }
+		if(time > MAX_8_BIT_VALUE) { throw new RangeError('duration exceeds max') }
 		return ConverterUtil.encodeU8(time)
 	}
 }

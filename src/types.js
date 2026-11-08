@@ -1,4 +1,4 @@
-/** @import { BLOCKS, SOCKET_COMMANDS, SOCKET_STATUS, PHY_OPERATIONAL_MODE } from './defs.js' */
+/** @import { BLOCKS, BUFFER_SIZES, SOCKET_NUMBERS, SOCKET_COMMANDS, SOCKET_STATUS, PHY_OPERATIONAL_MODE } from './defs.js' */
 
 /** @typedef {typeof BLOCKS[keyof typeof BLOCKS]} Block */
 
@@ -90,7 +90,7 @@
 //
 //
 
-/** @typedef {0|1|2|3|4|5|6|7} SocketNumber */
+/** @typedef {typeof SOCKET_NUMBERS[number]} SocketNumber */
 
 /**
  * @typedef {Object} SocketModeClosed
@@ -146,6 +146,6 @@
 
 /** @typedef {typeof SOCKET_STATUS[keyof typeof SOCKET_STATUS]} SocketStatus */
 
-/** @typedef {0|1|2|4|8|16} BufferSize */
+/** @typedef {typeof BUFFER_SIZES[number]} BufferSize */
 
 export {}
