@@ -6,6 +6,9 @@
   "keywords": [
     "ethernet"
   ],
+  "engines": {
+    "node": ">=26"
+  },
   "exports": {
     ".": "./src/index.js",
     "./common": "./src/common.js",
