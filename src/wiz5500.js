@@ -31,7 +31,10 @@ import {
 
 	SocketNumber,
 	SocketSocketInterrupt,
-	SocketSocketInterruptMask
+	SocketSocketInterruptMask,
+
+	ReceiveBufferSource,
+	TransmitBufferSource
 } from './types.js' */
 /** @import { CommonBufferSource } from './common.js' */
 
@@ -776,9 +779,19 @@ export class Wiz5500 {
 	 * @param {SocketNumber} socketNumber
 	 * @param {number} address
 	 * @param {number} length
-	 * @returns {Promise<CommonBufferSource>}
+	 * @returns {Promise<ReceiveBufferSource>}
 	 */
 	async readSocketRX(socketNumber, address, length) {
 		return Common.readSocketRX(this.#bus, socketNumber, address, length)
+	}
+
+	/**
+	 * @param {SocketNumber} socketNumber
+	 * @param {number} address
+	 * @param {TransmitBufferSource} buffer
+	 * @returns {Promise<void>}
+	 */
+	async writeSocketTX(socketNumber, address, buffer) {
+		return Common.writeSocketTX(this.#bus, socketNumber, address, buffer)
 	}
 }

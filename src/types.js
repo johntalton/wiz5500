@@ -148,4 +148,8 @@
 
 /** @typedef {typeof BUFFER_SIZES[number]} BufferSize */
 
+/** @typedef {ArrayBuffer|ArrayBufferView<ArrayBuffer>} ReceiveBufferSource */
+
+/** @typedef {ArrayBuffer|ArrayBufferView<ArrayBuffer>} TransmitBufferSource */
+
 export {}
