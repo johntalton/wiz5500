@@ -23,7 +23,7 @@
   "scripts": {
     "lint": "biome check",
     "test": "node --test test/**/*.test.js",
-    "coverage": "c8 --src src --check-coverage --statements 90 --branches 70 --functions 50 --lines 90 -r lcovonly -r text node --test test/**/*.test.js"
+    "coverage": "c8 --src src --check-coverage --statements 99 --branches 85 --functions 100 --lines 99 -r lcovonly -r text node --test test/**/*.test.js"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.6",

@@ -165,7 +165,12 @@ export class ConverterUtil {
 		if(e === undefined) { throw new Error('undefined hardware address part (e)') }
 		if(f === undefined) { throw new Error('undefined hardware address part (f))') }
 
-		const canonical = [...u8].map(octet => octet.toString(16).padStart(2, '0')).join(':')
+		const canonical = [...u8]
+			.map(octet => octet
+				.toString(16)
+				.toUpperCase()
+				.padStart(2, '0')
+			).join(':')
 
 		return {
 			a, b, c, d, e, f,

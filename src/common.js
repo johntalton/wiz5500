@@ -90,12 +90,15 @@ export class Common {
 	static async writeRegister(bus, block, address, buffer) {
 		const frame = Common.#frame(block, address, true, FRAME_BYTE_MODE_VARIABLE, buffer)
 		// console.log('writeRegister frame', frame)
-		const _result = await bus.transfer({
+		const result = await bus.transfer({
 			sendBuffer: frame,
 			receiveBufferLength: 0
 		})
 
-		// console.log('writeRegister result', result)
+		// console.log('writeRegister result', result.bytesWritten, frame.byteLength)
+		if(result.bytesWritten <= SPI_FRAME_HEADER_SIZE) {
+			throw new Error('failure to write frame')
+		}
 	}
 
 	/**

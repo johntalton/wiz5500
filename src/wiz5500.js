@@ -36,7 +36,6 @@ import {
 	ReceiveBufferSource,
 	TransmitBufferSource
 } from './types.js' */
-/** @import { CommonBufferSource } from './common.js' */
 
 export class Wiz5500 {
 	/** @type {SPIBus} */
