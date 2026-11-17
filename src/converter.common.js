@@ -231,10 +231,15 @@ export class ConverterCommon {
 	static decodeSocketInterruptMask(buffer) {
 		const mask = ConverterUtil.decodeU8(buffer)
 
-		return BitSmush.unSmushBits(
+		const result = BitSmush.unSmushBits(
 			[ [ 0,1 ], [ 1,1 ], [ 2,1 ], [ 3,1 ], [ 4,1 ], [ 5,1 ], [ 6,1 ], [ 7,1 ] ],
 			mask)
-				.map(value => value === 1)
+
+		const sim =
+			/** @type {[ boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean ]} */
+			(result.map(value => value === 1))
+
+		return sim
 	}
 
 	/**
@@ -242,9 +247,13 @@ export class ConverterCommon {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeSocketInterruptMask(socketInterruptMask) {
+		const values =
+			/** @type {[1|0, 1|0, 1|0, 1|0, 1|0, 1|0, 1|0, 1|0]} */
+			(socketInterruptMask.map(val => (val ? 1 : 0)))
+
 		const value = BitSmush.smushBits(
 			[ [ 0,1 ], [ 1,1 ], [ 2,1 ], [ 3,1 ], [ 4,1 ], [ 5,1 ], [ 6,1 ], [ 7,1 ] ],
-			socketInterruptMask.map(val => (val ? 1 : 0))
+			values
 		)
 
 		return ConverterUtil.encodeU8(value)

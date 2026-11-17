@@ -23,14 +23,14 @@
   "scripts": {
     "lint": "biome check",
     "test": "node --test test/**/*.test.js",
-    "coverage": "c8 --src src --check-coverage --statements 99 --branches 85 --functions 100 --lines 99 -r lcovonly -r text node --test test/**/*.test.js"
+    "coverage": "c8 --src src --check-coverage --statements 100 --branches 85 --functions 100 --lines 100 -r lcovonly -r text node --test test/**/*.test.js"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.6.6",
+    "@biomejs/biome": "^2.6.8",
     "@johntalton/and-other-delights": "^8.6.7",
     "c8": "^12.0.0"
   },
   "dependencies": {
-    "@johntalton/bitsmush": "^1.0.6"
+    "@johntalton/bitsmush": "^1.0.7"
   }
 }

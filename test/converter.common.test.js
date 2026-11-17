@@ -47,6 +47,20 @@ describe('Converter.Common', () => {
 			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_0000 ]))
 		})
 
+		it('should handle alt values', () => {
+			const buffer = ConverterCommon.encodeMode({
+				reset: true,
+				wakeOnLAN: false,
+				blockPing: true,
+				enablePPPoE: true,
+				forceARP: false
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b1001_1000 ]))
+		})
+
 	})
 
 	describe('decodeInterruptAssertWaitTime', () => {
@@ -83,6 +97,27 @@ describe('Converter.Common', () => {
 			Assert.deepEqual(u8, Uint8Array.from([ 0x01, 0x10 ]))
 		})
 
+		it('should handle negative values', () => {
+			Assert.throws(() => ConverterCommon.encodeInterruptAssertWaitTime(Temporal.Duration.from({ microseconds: -5 })), {
+				message: 'duration must be positive',
+				name: 'RangeError'
+			})
+		})
+
+		it('should handle small values', () => {
+			Assert.throws(() => ConverterCommon.encodeInterruptAssertWaitTime(Temporal.Duration.from({ nanoseconds: 1 })), {
+				message: 'duration too small',
+				name: 'RangeError'
+			})
+		})
+
+		it('should handle large values', () => {
+			Assert.throws(() => ConverterCommon.encodeInterruptAssertWaitTime(Temporal.Duration.from({ seconds: 10 })), {
+				message: 'duration too large',
+				name: 'RangeError'
+			})
+		})
+
 	})
 
 	describe('decodeInterrupt', () => {
@@ -108,6 +143,18 @@ describe('Converter.Common', () => {
 				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
 				new Uint8Array(buffer)
 			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_0000 ]))
+		})
+
+		it('should handle some value', () => {
+			const buffer = ConverterCommon.encodeInterrupt({
+				conflict: true,
+				closedPPPoE: true,
+				magicWOL: true
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b1011_0000 ]))
 		})
 
 	})
@@ -138,6 +185,19 @@ describe('Converter.Common', () => {
 				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
 				new Uint8Array(buffer)
 			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_0000 ]))
+		})
+
+		it('should handle alt value', () => {
+			const buffer = ConverterCommon.encodeInterruptMask({
+				enableConflict: false,
+				enableUnreachable: true,
+				enableClosedPPPoE: true,
+				enableMagicWOL: false
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0110_0000 ]))
 		})
 
 	})

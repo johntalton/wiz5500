@@ -4,7 +4,7 @@ import Assert from 'node:assert/strict'
 import { BLOCKS } from '@johntalton/wiz5500'
 import { Common, isBlock, SPI_FRAME_HEADER_SIZE } from '@johntalton/wiz5500/common'
 
-import { MockBus } from './mock.bus.js'
+import { MockBus, WriteZeroBus } from './mock.bus.js'
 
 describe('isBlock', () => {
 	it('should handle valid (zero)', () => {
@@ -43,6 +43,16 @@ describe('Common', () => {
 
 			Assert.deepEqual(bus.buffer, Uint8Array.from([ 0xCA, 0xFE, 0b0011_1100, 77 ]))
 			Assert.equal(bus.bytesWritten, SPI_FRAME_HEADER_SIZE + 1)
+		})
+
+		it('should handle invalid write bytes', async () => {
+			const bus = new WriteZeroBus()
+			const address = 0xF0_0D
+			const buffer = Uint8Array.from([ 77 ])
+			await Assert.rejects(() => Common.writeRegister(bus, BLOCKS.SOCKET_7_RX, address, buffer), {
+				message: 'failure to write frame',
+				name: 'Error'
+			})
 		})
 	})
 
