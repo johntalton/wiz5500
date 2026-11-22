@@ -190,10 +190,34 @@ describe('Converter.Util', () => {
 			})
 		})
 
-		it('should handle invalid buffer length', () => {
+		it('should handle invalid buffer length (0)', () => {
+			const buffer = Uint8Array.from([ ])
+			Assert.throws(() => ConverterUtil.decodeAddress(buffer), {
+				message: 'undefined address part (a)',
+				name: 'Error'
+			})
+		})
+
+		it('should handle invalid buffer length (1)', () => {
 			const buffer = Uint8Array.from([ 0x00 ])
 			Assert.throws(() => ConverterUtil.decodeAddress(buffer), {
 				message: 'undefined address part (b)',
+				name: 'Error'
+			})
+		})
+
+		it('should handle invalid buffer length (2)', () => {
+			const buffer = Uint8Array.from([ 0x00, 0x00 ])
+			Assert.throws(() => ConverterUtil.decodeAddress(buffer), {
+				message: 'undefined address part (c)',
+				name: 'Error'
+			})
+		})
+
+		it('should handle invalid buffer length (3)', () => {
+			const buffer = Uint8Array.from([ 0x00, 0x00, 0x00 ])
+			Assert.throws(() => ConverterUtil.decodeAddress(buffer), {
+				message: 'undefined address part (d)',
 				name: 'Error'
 			})
 		})
@@ -284,6 +308,53 @@ describe('Converter.Util', () => {
 			})
 		})
 
+		it('should handle invalid buffer size (0)', () => {
+			const buffer = Uint8Array.from([ ])
+			Assert.throws(() => ConverterUtil.decodeHardwareAddress(buffer), {
+				message: 'undefined hardware address part (a)',
+				name: 'Error'
+			})
+		})
+
+		it('should handle invalid buffer size (1)', () => {
+			const buffer = Uint8Array.from([ 0x00 ])
+			Assert.throws(() => ConverterUtil.decodeHardwareAddress(buffer), {
+				message: 'undefined hardware address part (b)',
+				name: 'Error'
+			})
+		})
+
+		it('should handle invalid buffer size (2)', () => {
+			const buffer = Uint8Array.from([ 0x00, 0x00 ])
+			Assert.throws(() => ConverterUtil.decodeHardwareAddress(buffer), {
+				message: 'undefined hardware address part (c)',
+				name: 'Error'
+			})
+		})
+
+		it('should handle invalid buffer size (3)', () => {
+			const buffer = Uint8Array.from([ 0x00, 0x00, 0x00 ])
+			Assert.throws(() => ConverterUtil.decodeHardwareAddress(buffer), {
+				message: 'undefined hardware address part (d)',
+				name: 'Error'
+			})
+		})
+
+		it('should handle invalid buffer size (4)', () => {
+			const buffer = Uint8Array.from([ 0x00, 0x00, 0x00, 0x00 ])
+			Assert.throws(() => ConverterUtil.decodeHardwareAddress(buffer), {
+				message: 'undefined hardware address part (e)',
+				name: 'Error'
+			})
+		})
+
+		it('should handle invalid buffer size (5)', () => {
+			const buffer = Uint8Array.from([ 0x00, 0x00, 0x00, 0x00, 0x00 ])
+			Assert.throws(() => ConverterUtil.decodeHardwareAddress(buffer), {
+				message: 'undefined hardware address part (f)',
+				name: 'Error'
+			})
+		})
 	})
 
 	describe('encodeHardwareAddress', () => {

@@ -266,6 +266,13 @@ describe('Converter.Common', () => {
 			Assert.deepEqual(u8, Uint8Array.from([ 0xFF, 0xFF ]))
 		})
 
+		it('should handle invalid values', () => {
+			Assert.throws(() => ConverterCommon.encodeRetryTime(Temporal.Duration.from({ seconds: -3 })), {
+				message: 'duration must be positive',
+				name: 'RangeError'
+			})
+		})
+
 	})
 
 	describe('decodeRetryCount', () => {
@@ -308,6 +315,19 @@ describe('Converter.Common', () => {
 			Assert.deepEqual(u8, Uint8Array.from([ 0xFF ]))
 		})
 
+		it('should handle invalid values', () => {
+			Assert.throws(() => ConverterCommon.encodePPPLinkControlProtocolRequestTimer(Temporal.Duration.from({ seconds: -3 })), {
+				message: 'duration must be positive',
+				name: 'RangeError'
+			})
+		})
+
+		it('should handle overflow', () => {
+			Assert.throws(() => ConverterCommon.encodePPPLinkControlProtocolRequestTimer(Temporal.Duration.from({ milliseconds: 6375 + Math.round(25/2) })), {
+				message: 'duration exceeds max',
+				name: 'RangeError'
+			})
+		})
 	})
 
 	describe('decodePPPLinkControlProtocolMagicNumber', () => {
@@ -397,6 +417,18 @@ describe('Converter.Common', () => {
 				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
 				new Uint8Array(buffer)
 			Assert.deepEqual(u8, Uint8Array.from([ 0b0011_1000 ]))
+		})
+
+		it('should handle basic (alt)', () => {
+			const buffer = ConverterCommon.encodePHYConfig({
+				reset: false,
+				softwareConfiguredMode: true,
+				mode: PHY_OPERATIONAL_MODE.AUTO_NEGOTIATION
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b1111_1000 ]))
 		})
 
 	})

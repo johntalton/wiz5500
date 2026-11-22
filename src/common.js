@@ -23,6 +23,16 @@ export function isBlock(block) {
 	return (block >= 0) && (block <= 0x1F)
 }
 
+/**
+ * @param {number} socketNumber
+ */
+export function isSocketNumber(socketNumber) {
+	if(!Number.isInteger(socketNumber)) { return false }
+	if(socketNumber < 0) { return false }
+	if(socketNumber > 7) { return false }
+	return true
+}
+
 export class Common {
 	/**
 	 * @param {Block} block

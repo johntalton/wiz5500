@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test'
 import Assert from 'node:assert/strict'
 
-import { PHY_OPERATIONAL_MODE, SOCKET_PROTOCOL, Wiz5500 } from '@johntalton/wiz5500'
+import { PHY_OPERATIONAL_MODE, SOCKET_COMMANDS, SOCKET_PROTOCOL, SOCKET_STATUS, Wiz5500 } from '@johntalton/wiz5500'
 
 import { MockBus } from './mock.bus.js'
 
@@ -507,11 +507,11 @@ describe('Wiz5500', () => {
 
 	describe('readSocketCommand', () => {
 		it('should read value', async () => {
-			const bus = new MockBus(Uint8Array.from([ 42 ]))
+			const bus = new MockBus(Uint8Array.from([ SOCKET_COMMANDS.LISTEN ]))
 			const wiz = new Wiz5500(bus)
 			const socketNumber = 3
 			const result = await wiz.readSocketCommand(socketNumber)
-			Assert.deepEqual(result, 42)
+			Assert.deepEqual(result, 2)
 		})
 	})
 
@@ -562,11 +562,11 @@ describe('Wiz5500', () => {
 
 	describe('readSocketStatus', () => {
 		it('should read value', async () => {
-			const bus = new MockBus(Uint8Array.from([ 77 ]))
+			const bus = new MockBus(Uint8Array.from([ SOCKET_STATUS.CLOSE_WAIT ]))
 			const wiz = new Wiz5500(bus)
 			const socketNumber = 3
 			const result = await wiz.readSocketStatus(socketNumber)
-			Assert.deepEqual(result, 77)
+			Assert.deepEqual(result, 0x1C)
 		})
 	})
 

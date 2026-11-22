@@ -119,6 +119,17 @@ describe('Converter.Socket', () => {
 			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_0001 ]))
 		})
 
+		it('should handle TCP alternate parameters', () => {
+			const buffer = ConverterSocket.encodeMode({
+				protocol: SOCKET_PROTOCOL.TCP,
+				enableNoDelayedACK: true
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0010_0001 ]))
+		})
+
 		it('should handle UDP', () => {
 			const buffer = ConverterSocket.encodeMode({
 				protocol: SOCKET_PROTOCOL.UDP,
@@ -133,6 +144,48 @@ describe('Converter.Socket', () => {
 			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_0010 ]))
 		})
 
+		it('should handle UDP alternate parameters (BCASTB, MC)', () => {
+			const buffer = ConverterSocket.encodeMode({
+				protocol: SOCKET_PROTOCOL.UDP,
+				enableBroadcastBlocking: true,
+				enabledUDPMulticasting: false,
+				enableIGMPv1: true,
+				enableUnicastBlocking: false
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0110_0010 ]))
+		})
+
+		it('should handle UDP alternate parameters (UCASTB)', () => {
+			const buffer = ConverterSocket.encodeMode({
+				protocol: SOCKET_PROTOCOL.UDP,
+				enableBroadcastBlocking: false,
+				enabledUDPMulticasting: false,
+				enableIGMPv1: false,
+				enableUnicastBlocking: true
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0001_0010 ]))
+		})
+
+		it('should handle UDP alternate parameters (MULTI)', () => {
+			const buffer = ConverterSocket.encodeMode({
+				protocol: SOCKET_PROTOCOL.UDP,
+				enableBroadcastBlocking: false,
+				enabledUDPMulticasting: true,
+				enableIGMPv1: false,
+				enableUnicastBlocking: false
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b1000_0010 ]))
+		})
+
 		it('should handle MACRAW', () => {
 			const buffer = ConverterSocket.encodeMode({
 				protocol: SOCKET_PROTOCOL.MAC_RAW,
@@ -145,6 +198,62 @@ describe('Converter.Socket', () => {
 				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
 				new Uint8Array(buffer)
 			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_0100 ]))
+		})
+
+		it('should handle MACRAW (MFEN)', () => {
+			const buffer = ConverterSocket.encodeMode({
+				protocol: SOCKET_PROTOCOL.MAC_RAW,
+				enableBroadcastBlocking: false,
+				enableIPv6Blocking: false,
+				enableMACFiltering: true,
+				enableMulticastBlocking: false
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b1000_0100 ]))
+		})
+
+		it('should handle MACRAW (BCASTB)', () => {
+			const buffer = ConverterSocket.encodeMode({
+				protocol: SOCKET_PROTOCOL.MAC_RAW,
+				enableBroadcastBlocking: true,
+				enableIPv6Blocking: false,
+				enableMACFiltering: false,
+				enableMulticastBlocking: false
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0100_0100 ]))
+		})
+
+		it('should handle MACRAW (MMB)', () => {
+			const buffer = ConverterSocket.encodeMode({
+				protocol: SOCKET_PROTOCOL.MAC_RAW,
+				enableBroadcastBlocking: false,
+				enableIPv6Blocking: false,
+				enableMACFiltering: false,
+				enableMulticastBlocking: true
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0010_0100 ]))
+		})
+
+		it('should handle MACRAW (MIP6B)', () => {
+			const buffer = ConverterSocket.encodeMode({
+				protocol: SOCKET_PROTOCOL.MAC_RAW,
+				enableBroadcastBlocking: false,
+				enableIPv6Blocking: true,
+				enableMACFiltering: false,
+				enableMulticastBlocking: false
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0001_0100 ]))
 		})
 
 		it('should handle unknown protocol', () => {
@@ -164,6 +273,13 @@ describe('Converter.Socket', () => {
 			Assert.equal(result, SOCKET_COMMANDS.NOOP)
 		})
 
+		it('should handle invalid command', () => {
+			const buffer = Uint8Array.from([ 42 ])
+			Assert.throws(() => ConverterSocket.decodeCommand(buffer), {
+				message: 'unknown socket command',
+				name: 'Error'
+			})
+		})
 	})
 
 	describe('encodeCommand', () => {
@@ -194,7 +310,7 @@ describe('Converter.Socket', () => {
 	})
 
 	describe('encodeSocketInterrupt', () => {
-		it('should handle value', () => {
+		it('should handle value (empty)', () => {
 			const buffer = ConverterSocket.encodeSocketInterrupt({
 				// empty
 			})
@@ -202,6 +318,28 @@ describe('Converter.Socket', () => {
 				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
 				new Uint8Array(buffer)
 			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_0000 ]))
+		})
+
+		it('should handle value (clear sendOk, receive)', () => {
+			const buffer = ConverterSocket.encodeSocketInterrupt({
+				sendOk: true,
+				receive: true
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0001_0100 ]))
+		})
+
+		it('should handle value (clear timeout, disconnect)', () => {
+			const buffer = ConverterSocket.encodeSocketInterrupt({
+				timeout: true,
+				disconnect: true
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_1010 ]))
 		})
 
 	})
@@ -213,6 +351,13 @@ describe('Converter.Socket', () => {
 			Assert.equal(result, 0)
 		})
 
+		it('should handle invalid status', () => {
+			const buffer = Uint8Array.from([ 0xFF ])
+			Assert.throws(() => ConverterSocket.decodeStatus(buffer), {
+				message: 'unknown socket status',
+				name: 'Error'
+			})
+		})
 	})
 
 	describe('decodeMaximumSegmentSize', () => {
@@ -293,6 +438,13 @@ describe('Converter.Socket', () => {
 			Assert.equal(result, 0)
 		})
 
+		it('should handle invalid size', () => {
+			const buffer = Uint8Array.from([ 3 ])
+			Assert.throws(() => ConverterSocket.decodeReceiveBufferSize(buffer), {
+				message: 'invalid buffer size',
+				name: 'RangeError'
+			})
+		})
 	})
 
 	describe('encodeReceiveBufferSize', () => {
@@ -305,6 +457,14 @@ describe('Converter.Socket', () => {
 			Assert.deepEqual(u8, Uint8Array.from([ 16 ]))
 		})
 
+		it('should handle invalid size', () => {
+			const size = 42
+			Assert.throws(() => ConverterSocket.encodeReceiveBufferSize(size), {
+				message: 'invalid buffer size',
+				name: 'RangeError'
+			})
+		})
+
 	})
 
 	describe('decodeTransmitBufferSize', () => {
@@ -314,6 +474,13 @@ describe('Converter.Socket', () => {
 			Assert.equal(result, 0)
 		})
 
+		it('should handle invalid size', () => {
+			const buffer = Uint8Array.from([ 3 ])
+			Assert.throws(() => ConverterSocket.decodeTransmitBufferSize(buffer), {
+				message: 'invalid buffer size',
+				name: 'RangeError'
+			})
+		})
 	})
 
 	describe('encodeTransmitBufferSize', () => {
@@ -324,6 +491,14 @@ describe('Converter.Socket', () => {
 				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
 				new Uint8Array(buffer)
 			Assert.deepEqual(u8, Uint8Array.from([ 2 ]))
+		})
+
+		it('should handle invalid size', () => {
+			const size = 42
+			Assert.throws(() => ConverterSocket.encodeTransmitBufferSize(size), {
+				message: 'invalid buffer size',
+				name: 'RangeError'
+			})
 		})
 
 	})
@@ -470,11 +645,11 @@ describe('Converter.Socket', () => {
 	describe('encodeInterruptMask', () => {
 		it('should handle value', () => {
 			const buffer = ConverterSocket.encodeInterruptMask({
-				enableConnect: false,
-				enableDisconnect: false,
-				enableReceive: false,
 				enableSendOk: false,
-				enableTimeout: false
+				enableTimeout: false,
+				enableReceive: false,
+				enableDisconnect: false,
+				enableConnect: false,
 			})
 			const u8 = ArrayBuffer.isView(buffer) ?
 				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
@@ -482,6 +657,33 @@ describe('Converter.Socket', () => {
 			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_0000 ]))
 		})
 
+		it('should handle value (ok, timeout, connect)', () => {
+			const buffer = ConverterSocket.encodeInterruptMask({
+				enableSendOk: true,
+				enableTimeout: true,
+				enableReceive: false,
+				enableDisconnect: false,
+				enableConnect: true,
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0001_1001 ]))
+		})
+
+		it('should handle value (disconnect)', () => {
+			const buffer = ConverterSocket.encodeInterruptMask({
+				enableSendOk: false,
+				enableTimeout: false,
+				enableReceive: false,
+				enableDisconnect: true,
+				enableConnect: false,
+			})
+			const u8 = ArrayBuffer.isView(buffer) ?
+				new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength) :
+				new Uint8Array(buffer)
+			Assert.deepEqual(u8, Uint8Array.from([ 0b0000_0010 ]))
+		})
 	})
 
 	describe('decodeFragmentOffsetInIPHeader', () => {

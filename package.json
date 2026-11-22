@@ -1,6 +1,6 @@
 {
   "name": "@johntalton/wiz5500",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "license": "MIT",
   "keywords": [
@@ -23,7 +23,7 @@
   "scripts": {
     "lint": "biome check",
     "test": "node --test test/**/*.test.js",
-    "coverage": "c8 --src src --check-coverage --statements 100 --branches 85 --functions 100 --lines 100 -r lcovonly -r text node --test test/**/*.test.js"
+    "coverage": "c8 --src src --check-coverage --statements 100 --branches 99 --functions 100 --lines 100 -r lcovonly -r text node --test test/**/*.test.js"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.8",

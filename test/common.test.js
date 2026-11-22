@@ -2,9 +2,9 @@ import { describe, it } from 'node:test'
 import Assert from 'node:assert/strict'
 
 import { BLOCKS } from '@johntalton/wiz5500'
-import { Common, isBlock, SPI_FRAME_HEADER_SIZE } from '@johntalton/wiz5500/common'
+import { Common, isBlock, isSocketNumber, SPI_FRAME_HEADER_SIZE } from '@johntalton/wiz5500/common'
 
-import { MockBus, WriteZeroBus } from './mock.bus.js'
+import { MockBus, ReadUndefBux, WriteZeroBus } from './mock.bus.js'
 
 describe('isBlock', () => {
 	it('should handle valid (zero)', () => {
@@ -19,6 +19,28 @@ describe('isBlock', () => {
 
 	it('should handle invalid', () => {
 		const result = isBlock(0x20)
+		Assert.equal(result, false)
+	})
+})
+
+describe('isSocketNumber', () => {
+	it('should handle valid', () => {
+		const result = isSocketNumber(0)
+		Assert.equal(result, true)
+	})
+
+	it('should handle out of range', () => {
+		const result = isSocketNumber(42)
+		Assert.equal(result, false)
+	})
+
+	it('should handle out of range (negative)', () => {
+		const result = isSocketNumber(-42)
+		Assert.equal(result, false)
+	})
+
+	it('should handle non-integer', () => {
+		const result = isSocketNumber(3.1415)
 		Assert.equal(result, false)
 	})
 })
@@ -66,6 +88,7 @@ describe('Common', () => {
 			Assert.deepEqual(bus.buffer, Uint8Array.from([ 0xCA, 0xFE, 0b000_0100, 0xFF ]))
 			Assert.equal(bus.bytesWritten, SPI_FRAME_HEADER_SIZE + 1)
 		})
+
 	})
 
 	describe('writeSocket', () => {
@@ -162,7 +185,26 @@ describe('Common', () => {
 				message: 'invalid read length',
 				name: 'RangeError'
 			})
+		})
 
+		it('should handle frame write errors', async () => {
+			const bus = new WriteZeroBus()
+			const address = 0xF0_0D
+			const length = 2
+			await Assert.rejects(async () => await Common.readCommon(bus, address, length), {
+				message: 'write failure',
+				name: 'Error'
+			})
+		})
+
+		it('should handle read error', async () => {
+			const bus = new ReadUndefBux(undefined)
+			const address = 0xF0_0D
+			const length = 2
+			await Assert.rejects(async () => await Common.readCommon(bus, address, length), {
+				message: 'read failure',
+				name: 'Error'
+			})
 		})
 	})
 

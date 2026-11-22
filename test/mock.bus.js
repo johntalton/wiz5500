@@ -52,7 +52,6 @@ export class MockBus {
 }
 
 export class WriteZeroBus extends MockBus {
-
 	/**
 	 * @param {TransferRequest} request
 	 * @returns {Promise<TransferResult>}
@@ -63,6 +62,21 @@ export class WriteZeroBus extends MockBus {
 		return {
 			bytesWritten: 0,
 			readBuffer: result.readBuffer
+		}
+	}
+}
+
+export class ReadUndefBux extends MockBus {
+	/**
+	 * @param {TransferRequest} request
+	 * @returns {Promise<TransferResult>}
+	 */
+	async transfer(request) {
+		const result = await super.transfer(request)
+
+		return {
+			bytesWritten: result.bytesWritten,
+			readBuffer: undefined
 		}
 	}
 }

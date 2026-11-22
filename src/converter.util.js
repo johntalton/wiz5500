@@ -136,7 +136,7 @@ export class ConverterUtil {
 			undefined
 
 		if(parts === undefined) { throw new Error('failed to parse address') }
-		if(!Array.isArray(parts)) { throw new Error('invalid parts array') }
+		// if(!Array.isArray(parts)) { throw new Error('invalid parts array') }
 		if(parts.length !== ADDRESS_SIZE) { throw new Error('invalid parts length') }
 
 		const ok = parts.every(part => part <= 255 && part >= 0)
@@ -163,7 +163,7 @@ export class ConverterUtil {
 		if(c === undefined) { throw new Error('undefined hardware address part (c)') }
 		if(d === undefined) { throw new Error('undefined hardware address part (d)') }
 		if(e === undefined) { throw new Error('undefined hardware address part (e)') }
-		if(f === undefined) { throw new Error('undefined hardware address part (f))') }
+		if(f === undefined) { throw new Error('undefined hardware address part (f)') }
 
 		const canonical = [...u8]
 			.map(octet => octet
@@ -196,7 +196,7 @@ export class ConverterUtil {
 			undefined
 
 		if(parts === undefined) { throw new Error('failed to parse address') }
-		if(!Array.isArray(parts)) { throw new Error('invalid parts array') }
+		// if(!Array.isArray(parts)) { throw new Error('invalid parts array') }
 		if(parts.length !== HARDWARE_ADDRESS_SIZE) { throw new Error('invalid parts length') }
 
 		const ok = parts.every(part => part <= 255 && part >= 0)

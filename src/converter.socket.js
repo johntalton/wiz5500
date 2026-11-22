@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/style/noExcessiveLinesPerFile: does it all */
 import { BitSmush } from '@johntalton/bitsmush'
 import { ConverterUtil, MAX_8_BIT_VALUE } from './converter.util.js'
-import { BUFFER_SIZES, SOCKET_PROTOCOL } from './defs.js'
+import { BUFFER_SIZES, SOCKET_COMMANDS, SOCKET_PROTOCOL, SOCKET_STATUS } from './defs.js'
 
 /** @import { SPIBufferSource } from '@johntalton/and-other-delights' */
 /** @import { SocketCommand, SocketSocketInterrupt, SocketSocketInterruptMask, SocketStatus, BufferSize, SocketMode, SocketModeClosed, SocketModeTCP, SocketModeUDP, SocketModeMACRaw } from './types.js' */
@@ -21,8 +21,9 @@ export function isBufferSize(size) {
  * @returns {status is SocketStatus}
  */
 export function isSocketStatus(status) {
-	// todo better check
-	return status >= 0 && status <= MAX_8_BIT_VALUE
+	// return status >= 0 && status <= MAX_8_BIT_VALUE
+	// todo should this be this strict
+	return Object.values(/** @type {Record<String, number>} */(SOCKET_STATUS)).includes(status)
 }
 
 /**
@@ -30,8 +31,9 @@ export function isSocketStatus(status) {
  * @returns {command is SocketCommand}
  */
 export function isSocketCommand(command) {
-	// todo better check
-	return command >= 0 && command <= MAX_8_BIT_VALUE
+	// return command >= 0 && command <= MAX_8_BIT_VALUE
+	// todo should this be this strict
+	return Object.values(/** @type {Record<String, number>} */(SOCKET_COMMANDS)).includes(command)
 }
 
 export class ConverterSocket {
@@ -132,10 +134,11 @@ export class ConverterSocket {
 	 */
 	static #encodeModeMACRaw(mode) {
 		const mfen = mode.enableMACFiltering ? 1 : 0
+		const bcastb = mode.enableBroadcastBlocking ? 1 : 0
 		const mmb = mode.enableMulticastBlocking ? 1 : 0
 		const mip6b = mode.enableIPv6Blocking ? 1 : 0
 
-		const value = BitSmush.smushBits([ [ 7,1 ], [ 5,1 ], [ 4,1 ], [ 3,4 ] ], [ mfen, mmb, mip6b, mode.protocol ])
+		const value = BitSmush.smushBits([ [ 7,1 ], [ 6,1], [ 5,1 ], [ 4,1 ], [ 3,4 ] ], [ mfen, bcastb, mmb, mip6b, mode.protocol ])
 		return ConverterUtil.encodeU8(value)
 	}
 
@@ -292,7 +295,7 @@ export class ConverterSocket {
 	 */
 	static decodeReceiveBufferSize(buffer) {
 		const size = ConverterUtil.decodeU8(buffer)
-		if(!isBufferSize(size)) { throw new Error('invalid buffer size') }
+		if(!isBufferSize(size)) { throw new RangeError('invalid buffer size') }
 		return size
 	}
 
@@ -301,7 +304,7 @@ export class ConverterSocket {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeReceiveBufferSize(size) {
-		if(!isBufferSize(size)) { throw new Error('invalid buffer size') }
+		if(!isBufferSize(size)) { throw new RangeError('invalid buffer size') }
 		return ConverterUtil.encodeU8(size)
 	}
 
@@ -311,7 +314,7 @@ export class ConverterSocket {
 	 */
 	static decodeTransmitBufferSize(buffer) {
 		const size =  ConverterUtil.decodeU8(buffer)
-		if(!isBufferSize(size)) { throw new Error('invalid buffer size') }
+		if(!isBufferSize(size)) { throw new RangeError('invalid buffer size') }
 		return size
 	}
 
@@ -320,7 +323,7 @@ export class ConverterSocket {
 	 * @returns {SPIBufferSource}
 	 */
 	static encodeTransmitBufferSize(size) {
-		if(!isBufferSize(size)) { throw new Error('invalid buffer size') }
+		if(!isBufferSize(size)) { throw new RangeError('invalid buffer size') }
 		return ConverterUtil.encodeU8(size)
 	}
 
